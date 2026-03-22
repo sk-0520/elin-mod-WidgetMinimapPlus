@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="exclusion.dic" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Elin.Plugin.Generator.Test/Elin.Plugin.Generator.Test.csproj" />
+  <Project Path="Elin.Plugin.Generator/Elin.Plugin.Generator.csproj" />
+  <Project Path="Elin.Plugin.Main.Test/Elin.Plugin.Main.Test.csproj" />
+  <Project Path="Elin.Plugin.Main/Elin.Plugin.Main.csproj" DefaultStartup="true" />
+</Solution>

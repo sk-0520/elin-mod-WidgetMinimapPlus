@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="help help.xsd"
+	xmlns:help="help"
+	lang="ja"
+	xml:lang="ja"
+>
+
+<head>
+	<meta charset="utf-8" />
+	<title>ModHelp Template</title>
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="help.css"
+	/>
+	<script
+		type="text/javascript"
+		src="help.js"
+	></script>
+</head>
+
+<body>
+	<help:page>
+		<help:title>
+			<help:text
+				jp="概要"
+				en="Overview"
+				cn="概述"
+			/>
+		</help:title>
+
+		<help:image src="help/top.png" />
+		<help:br value="4" />
+
+		<help:p>
+			<help:text
+				jp="この Mod はミニマップにちょっとした機能を追加するものです。"
+				en="This mod adds some extra features to the minimap."
+				cn="此 Mod 为小地图添加了一些额外功能。"
+			/>
+		</help:p>
+
+		<help:topic>
+			<help:text
+				jp="セーブデータについて"
+				en="About Save Data"
+				cn="关于存档数据"
+			/>
+		</help:topic>
+
+		<help:p>
+			<help:text
+				jp="本体セーブデータは直接操作しませんので削除する場合の注意点はありません。"
+				en="This mod does not directly modify the main save data, so there are no special considerations when removing it."
+				cn="本 Mod 不会直接操作主存档数据，因此删除时无需特别注意。"
+			/>
+			<help:text
+				jp="ただし、Mod 用のセーブデータは残りますので、必要に応じて削除してください。"
+				en="However, the mod's save data will remain, so please delete it manually if needed."
+				cn="但是，Mod 的存档数据会保留，请根据需要手动删除。"
+			/>
+		</help:p>
+
+		<help:p>
+			<help:text
+				jp="以下にセーブデータが保存されます。"
+				en="Save data is stored in the following location."
+				cn="存档数据保存在以下位置。"
+			/>
+		</help:p>
+
+		<help:p>
+			<help:text jp="Elin\BepInEx\config\widgetminimapplus.cfg" />
+		</help:p>
+	</help:page>
+
+	<help:page>
+		<help:title>
+			<help:text
+				jp="使い方"
+				en="Usage"
+				cn="使用方法"
+			/>
+		</help:title>
+
+		<help:topic>
+			<help:text
+				jp="設定方法"
+				en="Configuration"
+				cn="设置方法"
+			/>
+		</help:topic>
+
+		<help:p>
+			<help:text
+				jp="ミニマップのメニューから WidgetMinimap [*] を選んで各種設定を行ってください。"
+				en="Select WidgetMinimap [*] from the minimap menu to configure various settings."
+				cn="请从小地图菜单中选择 WidgetMinimap [*] 进行各项设置。"
+			/>
+		</help:p>
+
+		<help:p>
+			<help:text
+				jp="基本的な設定はメニューから行えますが、一部設定データについては直接編集する必要があります。"
+				en="Basic settings can be configured from the menu, but some settings require direct editing."
+				cn="基本设置可以通过菜单进行配置，但部分设置数据需要直接编辑。"
+			/>
+		</help:p>
+
+		<help:topic>
+			<help:text
+				jp="マウスホバー"
+				en="Mouse Hover"
+				cn="鼠标悬停"
+			/>
+		</help:topic>
+
+		<help:p>
+			<help:text
+				jp="ミニマップにマウスをホバーしたときその周辺の情報が表示されます。"
+				en="Hovering the mouse over the minimap displays information about the surrounding area."
+				cn="将鼠标悬停在小地图上时，会显示该区域周围的信息。"
+			/>
+		</help:p>
+
+		<help:p>
+			<help:text
+				jp="表示される項目一覧は設定値により制限されます。"
+				en="The displayed items are limited by the settings."
+				cn="显示的项目列表受设置值限制。"
+			/>
+		</help:p>
+
+	</help:page>
+
+	<help:page>
+		<help:title>
+			<help:text
+				jp="カスタム項目"
+				en="Custom Items"
+				cn="自定义项目"
+			/>
+		</help:title>
+
+		<help:p>
+			<help:text
+				jp="サブメニュー「カスタム」から任意のキャラクター・アイテムを登録することができます。"
+				en="You can register any characters or items from the &quot;Custom&quot; submenu."
+				cn="可以通过子菜单&quot;自定义&quot;注册任意角色或物品。"
+			/>
+		</help:p>
+
+		<help:pair>
+			<help:key>
+				<help:text
+					jp="設定内容"
+					en="Settings"
+					cn="设置内容"
+				/>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="CSV 形式で登録します。"
+					en="Registered in CSV format."
+					cn="以 CSV 格式注册。"
+				/>
+			</help:value>
+
+			<help:key>
+				<help:text
+					jp="CSV 各要素"
+					en="CSV Elements"
+					cn="CSV 各元素"
+				/>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="前後のスペースはトリムされ、空の要素は無視されます。"
+					en="Leading and trailing spaces are trimmed, and empty elements are ignored."
+					cn="前后的空格会被修剪，空元素将被忽略。"
+				/>
+			</help:value>
+
+			<help:key>
+				<help:text
+					jp="検索対象"
+					en="Search Target"
+					cn="搜索对象"
+				/>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="該当のキャラクター・アイテムの ID・名前を登録します。"
+					en="Register the ID or name of the target character or item."
+					cn="注册相应角色或物品的 ID 和名称。"
+				/>
+			</help:value>
+
+			<help:key>
+				<help:text
+					jp="書式"
+					en="Format"
+					cn="格式"
+				/>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="通常の入力はプレーンテキストになり、先頭文字が「/」の場合は正規表現となります。"
+					en="Normal input is treated as plain text. If the first character is &quot;/&quot;, it is treated as a regular expression."
+					cn="普通输入为纯文本，首字符为&quot;/&quot;时将作为正则表达式处理。"
+				/>
+			</help:value>
+		</help:pair>
+
+		<help:topic>
+			<help:text
+				jp="プレーンテキスト"
+				en="Plain Text"
+				cn="纯文本"
+			/>
+		</help:topic>
+
+		<help:p>
+			<help:text
+				jp="プレーンテキストは部分一致で、大文字小文字が区別されます。"
+				en="Plain text uses partial matching and is case-sensitive."
+				cn="纯文本为部分匹配，且区分大小写。"
+			/>
+		</help:p>
+
+		<help:topic>
+			<help:text
+				jp="正規表現"
+				en="Regular Expression"
+				cn="正则表达式"
+			/>
+		</help:topic>
+
+		<help:p>
+			<help:text
+				jp="正規表現書式は次の通りです。"
+				en="The regular expression format is as follows."
+				cn="正则表达式格式如下。"
+			/>
+
+			<help:style color="#ff0000">
+				<help:text jp="/" />
+			</help:style>
+
+			<help:style color="#00ff00">
+				<help:text
+					jp="パターン"
+					en="Pattern"
+					cn="模式"
+				/>
+			</help:style>
+
+			<help:style color="#ff0000">
+				<help:text jp="/" />
+			</help:style>
+
+			<help:style color="#0000ff">
+				<help:text
+					jp="オプション"
+					en="Options"
+					cn="选项"
+				/>
+			</help:style>
+		</help:p>
+
+		<help:pair>
+			<help:key>
+				<help:style color="#00ff00">
+					<help:text
+						jp="パターン"
+						en="Pattern"
+						cn="模式"
+					/>
+				</help:style>
+			</help:key>
+			<help:value>
+				<help:text
+					jp=".NET 形式の正規表現パターンを指定します。"
+					en="Specify a .NET regular expression pattern."
+					cn="指定 .NET 格式的正则表达式模式。"
+				/>
+			</help:value>
+
+			<help:key>
+				<help:text
+					jp="オプション"
+					en="Option"
+					cn="选项"
+				/>
+				<help:style
+					bold="true"
+					color="#0000ff"
+				>
+					<help:text
+						jp=" i"
+						en=" i"
+						cn=" i"
+					/>
+				</help:style>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="大文字小文字を無視します。"
+					en="Ignores case."
+					cn="忽略大小写。"
+				/>
+			</help:value>
+
+			<help:key>
+				<help:text
+					jp="オプション"
+					en="Option"
+					cn="选项"
+				/>
+				<help:style
+					bold="true"
+					color="#0000ff"
+				>
+					<help:text
+						jp=" x"
+						en=" x"
+						cn=" x"
+					/>
+				</help:style>
+			</help:key>
+			<help:value>
+				<help:text
+					jp="パターン内のスペースを無視します。"
+					en="Ignores spaces in the pattern."
+					cn="忽略模式中的空格。"
+				/>
+			</help:value>
+		</help:pair>
+
+		<help:list>
+			<help:item>
+				<help:text
+					jp="先頭文字が / の場合は、正規表現として扱われるため終了の / が存在しない場合はエラーとなります。"
+					en="If the first character is /, it is treated as a regular expression, and an error occurs if the closing / is missing."
+					cn="如果首字符为 /，则作为正则表达式处理，若缺少结尾的 / 将会报错。"
+				/>
+			</help:item>
+			<help:item>
+				<help:text
+					jp="オプションの指定は任意です。オプション順序は問いませんが、不明なものはエラーとなります。"
+					en="Options are optional. The order does not matter, but unknown options will cause an error."
+					cn="选项的指定是可选的。选项顺序不限，但不明选项将导致错误。"
+				/>
+			</help:item>
+		</help:list>
+	</help:page>
+
+	<help:page>
+		<help:title>
+			<help:text
+				jp="ゲーム体験への影響"
+				en="Impact on Gameplay"
+				cn="对游戏体验的影响"
+			/>
+		</help:title>
+
+		<help:p>
+			<help:text
+				jp="通常の使用であればゲーム体験そのものには影響しませんが、以下の点はその限りではありません。"
+				en="Normal usage does not affect gameplay itself, but the following are exceptions."
+				cn="正常使用不会影响游戏体验本身，但以下情况除外。"
+			/>
+		</help:p>
+
+		<help:list>
+			<help:item>
+				<help:text
+					jp="未確認でも表示"
+					en="Show Even If Unseen"
+					cn="即使未确认也显示"
+				/>
+			</help:item>
+			<help:item>
+				<help:text
+					jp="クリック時に強制移動"
+					en="Force Move on Click"
+					cn="点击时强制移动"
+				/>
+			</help:item>
+		</help:list>
+
+		<help:p>
+			<help:text
+				jp="これらの設定は通常のゲームプレイに対してプレイヤーが有利になるため、使用する際は注意してください。"
+				en="These settings give the player an advantage over normal gameplay, so please use them with caution."
+				cn="这些设置会使玩家在正常游戏中获得优势，使用时请注意。"
+			/>
+		</help:p>
+
+		<help:qa>
+			<help:q>
+				<help:text
+					jp="魔法の地図を使用するのと何が違うの？"
+					en="How is this different from using a magic map?"
+					cn="这与使用魔法地图有什么不同？"
+				/>
+			</help:q>
+			<help:a>
+				<help:text jp="..." />
+			</help:a>
+		</help:qa>
+
+	</help:page>
+
+	<help:page>
+		<help:title>
+			<help:text
+				jp="Q&amp;A"
+				en="Q&amp;A"
+				cn="问答"
+			/>
+		</help:title>
+
+		<help:qa>
+			<help:q>
+				<help:text
+					jp="全文一致させたい"
+					en="How to match the full text?"
+					cn="如何进行全文匹配？"
+				/>
+			</help:q>
+			<help:a>
+				<help:text
+					jp="登録文言を /^検索文言$/ としてください。"
+					en="Set the registered text to /^search text$/."
+					cn="请将注册文本设置为 /^搜索文本$/。"
+				/>
+			</help:a>
+
+			<help:q>
+				<help:text
+					jp="カスタム登録数の上限は？"
+					en="Is there a limit on custom registrations?"
+					cn="自定义注册数量有上限吗？"
+				/>
+			</help:q>
+			<help:a>
+				<help:text
+					jp="原則上限はないですが、大量に登録するとパフォーマンスに影響が出ます。"
+					en="There is no limit in principle, but registering a large number may affect performance."
+					cn="原则上没有上限，但大量注册可能会影响性能。"
+				/>
+			</help:a>
+
+			<help:q>
+				<help:text
+					jp="翻訳がおかしい"
+					en="The translation seems off"
+					cn="翻译好像有问题"
+				/>
+			</help:q>
+			<help:a>
+				<help:text
+					jp="Github Copilot に全投げしたので確認していません。 報告をもらえれば対応します。"
+					en="The translations were entirely generated by GitHub Copilot and have not been reviewed. Please report any issues and they will be addressed."
+					cn="翻译全部交给了 GitHub Copilot，尚未确认。如收到反馈将进行修正。"
+				/>
+			</help:a>
+		</help:qa>
+	</help:page>
+
+	<help:page>
+		<help:title>
+			<help:text
+				jp="更新履歴"
+				en="Changelog"
+				cn="更新日志"
+			/>
+		</help:title>
+
+		<help:topic>
+			<help:text jp="1.0.0: 2026-04-DD" />
+		</help:topic>
+		<help:list>
+			<help:item>
+				<help:text jp="公開" />
+			</help:item>
+		</help:list>
+	</help:page>
+</body>
+
+</html>

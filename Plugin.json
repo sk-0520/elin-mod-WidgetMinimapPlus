@@ -1,0 +1,49 @@
+{
+  "$schema": "./dev-items/Plugin.schema.json",
+  "package": {
+    "title": "WidgetMinimap [*]",
+    "id": "widgetminimapplus",
+    "author": "sk",
+    "loadPriority": 100,
+    "elinVersion": "0.23.282",
+    "description": [
+      "[JP]",
+      "ミニマップを少し便利にします。",
+      "",
+      "ペット、ミニオン、特定のNPC、特定のアイテムをミニマップに表示します。",
+      "",
+      "[内容]",
+      "1. 階段の上下表示(*)",
+      "2. ペット/ミニオン",
+      "3. 特別なNPC(*): ビッグダディ, サンタクロース, 進化個体",
+      "4. 特定なアイテム(*): 祠, 神像, ジュア水",
+      "5. 独自のNPC,アイテムの追加(*)",
+      "6. ミニマップ上のカーソル付近の項目を一覧表示",
+      "7. ミニマップ地形情報の定期的更新",
+      "",
+      "通常は(*)項目について目視済みの物だけ表示されますが、設定を変更することで常時表示可能になります。",
+      "",
+      "[設定ファイル]",
+      "Elin\\BepInEx\\config\\widgetminimapplus.cfg",
+      "",
+      "[既知の問題]",
+      "* ミニマップとツールチップが重なる",
+      "* ワンブロックモードのような、エリア自体が大きくて各要素が重なりやすいマップでは表示がごちゃごちゃする",
+      "",
+      "------------",
+      "",
+      "https://github.com/sk-0520/elin-mod-WidgetMinimapPlus"
+    ],
+    "tags": [
+      "General",
+      "QoL",
+      "Utility"
+    ]
+  },
+  "mod": {
+    "name": "WidgetMinimapPlus",
+    "version": "0.9.0",
+    "useDebugId": true,
+    "log": "x:\\mod.log"
+  }
+}
