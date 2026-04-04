@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,7 +44,7 @@ namespace Elin.Plugin.Main.Models
             ;
         }
 
-        #region proeprty
+        #region property
 
         /// <summary>
         /// 表示すべき項目があるか。

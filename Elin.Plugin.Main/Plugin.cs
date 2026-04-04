@@ -11,12 +11,6 @@ namespace Elin.Plugin.Main
     [BepInPlugin(Package.Id, Mod.Name, Mod.Version)]
     public class Plugin : BaseUnityPlugin
     {
-        #region proeprty
-
-        private bool UseConfig { get; } = false;
-
-        #endregion
-
         #region function
 
         private Setting LoadConfig()

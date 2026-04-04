@@ -90,7 +90,6 @@ namespace Elin.Plugin.Main.Models.Impl
                 var ps = marker.ParticleSystem;
                 if (ps == null)
                 {
-                    marker.ParticleSystem = null;
                     continue;
                 }
 
@@ -338,7 +337,7 @@ namespace Elin.Plugin.Main.Models.Impl
         {
             if (setting.IsEnabled)
             {
-                if (markerFilter.SpecialCharacter(character, setting))
+                if (markerFilter.IsSpecialCharacter(character, setting))
                 {
                     Color color;
                     switch (character)
@@ -692,11 +691,11 @@ namespace Elin.Plugin.Main.Models.Impl
             var height = cells.GetLength(1);
             for (var y = min.Y; y <= max.Y; y++)
             {
-                if (0 < y && y < height)
+                if (0 <= y && y < height)
                 {
                     for (var x = min.X; x <= max.X; x++)
                     {
-                        if (0 < x && x < width)
+                        if (0 <= x && x < width)
                         {
                             var cell = cells[x, y];
                             result.Add(cell);
@@ -762,10 +761,10 @@ namespace Elin.Plugin.Main.Models.Impl
                         }
 
                         uiItem.text2.SetText(s.lang(), color);
-                        if (0 < characters.Hidden.Count)
-                        {
-                            t.note.AddText(ModHelper.Lang.Formatter.FormatHiddenByLimit(count: characters.Hidden.Count), FontColor.Gray);
-                        }
+                    }
+                    if (0 < characters.Hidden.Count)
+                    {
+                        t.note.AddText(ModHelper.Lang.Formatter.FormatHiddenByLimit(count: characters.Hidden.Count), FontColor.Gray);
                     }
                 }
 
@@ -1076,7 +1075,7 @@ namespace Elin.Plugin.Main.Models.Impl
             return false;
         }
 
-        public static void OnSetContextMenuPostfix(WidgetMinimap instance, UIContextMenu m, Setting setting)
+        public static void OnSetContextMenuPrefix(WidgetMinimap instance, UIContextMenu m, Setting setting)
         {
             var minimapMenu = new MinimapMenu(instance, m, setting);
 

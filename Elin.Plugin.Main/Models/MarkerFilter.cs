@@ -93,7 +93,7 @@ namespace Elin.Plugin.Main.Models
             return Judgement.IsPet(character, playerCharacter);
         }
 
-        public bool SpecialCharacter(Chara character, SpecialCharacterMarkerSetting setting)
+        public bool IsSpecialCharacter(Chara character, SpecialCharacterMarkerSetting setting)
         {
             // 戦争中は既存のマーカーと衝突するので無視
             if (NowDefenseGame)

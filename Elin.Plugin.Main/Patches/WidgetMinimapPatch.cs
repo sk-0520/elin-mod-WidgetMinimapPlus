@@ -1,4 +1,4 @@
-﻿using Elin.Plugin.Main.Models.Impl;
+using Elin.Plugin.Main.Models.Impl;
 using Elin.Plugin.Main.Models.Settings;
 using HarmonyLib;
 using UnityEngine.EventSystems;
@@ -64,9 +64,9 @@ namespace Elin.Plugin.Main.Patches
 
         [HarmonyPatch(nameof(WidgetMinimap.OnSetContextMenu), new[] { typeof(UIContextMenu) })]
         [HarmonyPrefix]
-        public static void OnSetContextMenuPostfix(WidgetMinimap __instance, UIContextMenu m)
+        public static void OnSetContextMenuPrefix(WidgetMinimap __instance, UIContextMenu m)
         {
-            WidgetMinimapImpl.OnSetContextMenuPostfix(__instance, m, Setting.Instance);
+            WidgetMinimapImpl.OnSetContextMenuPrefix(__instance, m, Setting.Instance);
         }
 
         [HarmonyPatch(nameof(WidgetMinimap.RefreshMarkers))]
