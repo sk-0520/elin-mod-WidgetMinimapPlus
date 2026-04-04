@@ -1,4 +1,4 @@
-﻿namespace Elin.Plugin.Main.PluginHelpers
+namespace Elin.Plugin.Main.PluginHelpers
 {
     /// <summary>
     /// Elin のゲーム内での便利関数をまとめるクラス。
@@ -38,7 +38,7 @@
         /// </summary>
         /// <param name="zone"></param>
         /// <returns></returns>
-        public bool IsSlefZone(Zone zone)
+        public bool IsSelfZone(Zone zone)
         {
             return zone.IsPCFactionOrTent;
         }

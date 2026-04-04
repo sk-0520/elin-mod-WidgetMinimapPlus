@@ -180,309 +180,6 @@ namespace Elin.Plugin.Main.Models.Impl
             return things.Where(t => judgement.IsSearchableThing(t));
         }
 
-        private static ParticleSystem BuildParticleSystemIfUnbuilt(WidgetMinimap instance, Scene scene, Zone zone, Marker marker)
-        {
-            if (marker.ParticleSystem != null)
-            {
-                return marker.ParticleSystem;
-            }
-
-            var name = $"{Package.Id}_{marker.GetType().Name}";
-            var particleSystem = CreateParticleSystemFromTemplate(instance, scene, zone, instance.psAlly, marker.MarkerShape, name);
-
-            return particleSystem;
-        }
-
-        private static void RefreshStairMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Thing> things, Judgement judgement, StairsMarkerSetting stairsSetting)
-        {
-            Debug.Assert(stairsSetting.IsEnabled);
-
-            var particleCleanerUp = new ParticleCleaner();
-            var particleCleanerDown = new ParticleCleaner();
-
-            foreach (var thing in things)
-            {
-                if (!judgement.IsStair(thing))
-                {
-                    continue;
-                }
-
-                Debug.Assert(thing.trait is TraitStairs);
-
-                if (!judgement.IsSeen(thing.Cell, stairsSetting.ShowEvenIfUnseen))
-                {
-                    continue;
-                }
-
-                var isUp = thing.trait is TraitStairsUp;
-
-                if (isUp)
-                {
-                    StairUpMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, StairUpMarker);
-                }
-                else
-                {
-                    StairDownMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, StairDownMarker);
-                }
-
-                if (isUp)
-                {
-                    Debug.Assert(StairUpMarker.ParticleSystem is not null);
-                    particleCleanerUp.ClearIfNotCleaned(StairUpMarker.ParticleSystem!);
-
-                    EmitParticlePlus(instance, thing, instance.psAlly, stairsSetting.UpColor, StairUpMarker.ParticleSystem!, BillboardSizeScale);
-                }
-                else
-                {
-                    Debug.Assert(StairDownMarker.ParticleSystem is not null);
-                    particleCleanerDown.ClearIfNotCleaned(StairDownMarker.ParticleSystem!);
-
-                    EmitParticlePlus(instance, thing, instance.psAlly, stairsSetting.DownColor, StairDownMarker.ParticleSystem!, BillboardSizeScale);
-                }
-            }
-        }
-
-        private static void RefreshMinionMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Chara> characters, Judgement judgement, MarkerSetting minionSetting)
-        {
-            Debug.Assert(minionSetting.IsEnabled);
-
-            var particleCleaner = new ParticleCleaner();
-            foreach (var character in characters)
-            {
-                if (!judgement.IsMinion(character, playerCharacter))
-                {
-                    continue;
-                }
-
-                MinionMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, MinionMarker);
-                particleCleaner.ClearIfNotCleaned(MinionMarker.ParticleSystem);
-
-                EmitParticlePlus(instance, character, instance.psAlly, minionSetting.Color, MinionMarker.ParticleSystem, BillboardSizeScale);
-            }
-        }
-
-        private static void RefreshPetMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Chara> characters, Judgement judgement, MarkerSetting petSetting)
-        {
-            Debug.Assert(petSetting.IsEnabled);
-
-            var particleCleaner = new ParticleCleaner();
-            foreach (var character in characters)
-            {
-                if (!judgement.IsPet(character, playerCharacter))
-                {
-                    continue;
-                }
-
-                PetMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, PetMarker);
-                particleCleaner.ClearIfNotCleaned(PetMarker.ParticleSystem);
-
-                EmitParticlePlus(instance, character, instance.psAlly, petSetting.Color, PetMarker.ParticleSystem, BillboardSizeScale);
-            }
-        }
-
-        private static void RefreshSpecialCharacterMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Chara> characters, Judgement judgement, SpecialCharacterMarkerSetting specialCharacterSetting)
-        {
-            Debug.Assert(specialCharacterSetting.IsEnabled);
-
-            // 戦争中は既存のマーカーと衝突するので無視
-            if (ModHelper.Elin.IsDefenseGame(zone))
-            {
-                return;
-            }
-
-            var particleCleaner = new ParticleCleaner();
-            foreach (var character in characters)
-            {
-                if (!judgement.IsSpecialCharacter(character))
-                {
-                    continue;
-                }
-
-                if (!judgement.IsSeen(character.Cell, specialCharacterSetting.ShowEvenIfUnseen))
-                {
-                    continue;
-                }
-
-                SpecialCharacterMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, SpecialCharacterMarker);
-                particleCleaner.ClearIfNotCleaned(SpecialCharacterMarker.ParticleSystem);
-
-                Color color;
-                switch (character)
-                {
-                    case { c_bossType: BossType.Boss }:
-                        color = specialCharacterSetting.BossColor;
-                        break;
-
-                    case { c_bossType: BossType.Evolved }:
-                        color = specialCharacterSetting.EvolvedColor;
-                        break;
-
-                    case { id: ElinId.BigDaddyId }:
-                        color = specialCharacterSetting.BigDaddyColor;
-                        break;
-
-                    case { id: ElinId.SantaId }:
-                        color = specialCharacterSetting.SantaColor;
-                        break;
-
-                    default:
-                        ModHelper.LogNotExpected([
-                            "character",
-                            $"character.id = {character.id}",
-                            $"character.c_bossType = {character.c_bossType}",
-                        ]);
-                        color = new Color(0, 0, 0, 0);
-                        break;
-                }
-
-                EmitParticlePlus(instance, character, instance.psAlly, color, SpecialCharacterMarker.ParticleSystem, BillboardSizeScale);
-            }
-        }
-
-        private static void RefreshSpecialThingMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Thing> things, Judgement judgement, SpecialThingMarkerSetting specialThingSetting)
-        {
-            Debug.Assert(specialThingSetting.IsEnabled);
-
-            // 自拠点無視
-            if (specialThingSetting.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
-            {
-                return;
-            }
-
-            var particleCleaner = new ParticleCleaner();
-            foreach (var thing in things)
-            {
-                if (!judgement.IsSpecialThing(thing))
-                {
-                    continue;
-                }
-
-                if (!judgement.IsSeen(thing.Cell, specialThingSetting.ShowEvenIfUnseen))
-                {
-                    continue;
-                }
-
-                SpecialThingMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, SpecialThingMarker);
-                particleCleaner.ClearIfNotCleaned(SpecialThingMarker.ParticleSystem);
-
-                Color color;
-                switch (thing.id)
-                {
-                    case ElinId.StatuePower:
-                        color = specialThingSetting.ShrineColor;
-                        break;
-
-                    case ElinId.WaterJure:
-                        color = specialThingSetting.JureColor;
-                        break;
-
-                    default:
-                        if (ElinId.SpecialThingGodOnlyIds.Contains(thing.id))
-                        {
-                            color = specialThingSetting.GodColor;
-                        }
-                        else
-                        {
-                            ModHelper.LogNotExpected([
-                                "thing",
-                                $"thing.id = {thing.id}",
-                            ]);
-                            color = new Color(0, 0, 0, 0);
-                        }
-                        break;
-                }
-
-                EmitParticlePlus(instance, thing, instance.psAlly, color, SpecialThingMarker.ParticleSystem, BillboardSizeScale);
-            }
-        }
-
-        private static void RefreshCustomMarkers(WidgetMinimap instance, Scene scene, Zone zone, Chara playerCharacter, IEnumerable<Chara> characters, IEnumerable<Thing> things, Judgement judgement, CustomMarkerSetting customMarkerSetting)
-        {
-            Debug.Assert(customMarkerSetting.IsEnabled);
-
-            // 自拠点無視
-            if (customMarkerSetting.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
-            {
-                return;
-            }
-
-            var stockThings = new List<Thing>();
-            var stockCharacters = new List<Chara>();
-
-            //var s = System.Diagnostics.Stopwatch.StartNew();
-
-            foreach (var character in characters)
-            {
-                if (!judgement.IsCustomCharacterCandidate(character, playerCharacter))
-                {
-                    continue;
-                }
-
-                if (!judgement.IsSeen(character.Cell, customMarkerSetting.ShowEvenIfUnseen))
-                {
-                    continue;
-                }
-
-                if (!CustomHitCache.TryGetCharacter(character, out var isHit))
-                {
-                    isHit = judgement.IsCustomElement(character, customMarkerSetting.Character);
-                    CustomHitCache.RegisterCharacter(character, isHit);
-                }
-                if (isHit)
-                {
-                    stockCharacters.Add(character);
-                }
-            }
-            foreach (var thing in things)
-            {
-                if (!judgement.IsCustomThingCandidate(thing))
-                {
-                    continue;
-                }
-
-                if (!judgement.IsSeen(thing.Cell, customMarkerSetting.ShowEvenIfUnseen))
-                {
-                    continue;
-                }
-
-                if (!CustomHitCache.TryGetThing(thing, out var isHit))
-                {
-                    isHit = judgement.IsCustomElement(thing, customMarkerSetting.Thing);
-                    CustomHitCache.RegisterThing(thing, isHit);
-                }
-                if (isHit)
-                {
-                    stockThings.Add(thing);
-                }
-            }
-
-            //ModHelper.WriteDebug($"[Refresh] {s.ElapsedMilliseconds} ms");
-
-            // なんなんだこれは
-            // あと勝ちなので優先する方をあとに指定
-            IReadOnlyCollection<Card>[] stockItems = customMarkerSetting.PrioritizeThing
-                ? [stockCharacters, stockThings]
-                : [stockThings, stockCharacters]
-            ;
-            var colors = new Queue<Color>(
-                customMarkerSetting.PrioritizeThing
-                    ? [customMarkerSetting.Character.Color, customMarkerSetting.Thing.Color]
-                    : [customMarkerSetting.Thing.Color, customMarkerSetting.Character.Color]
-            );
-
-            var particleCleaner = new ParticleCleaner();
-            foreach (var stockItemList in stockItems)
-            {
-                var color = colors.Dequeue();
-                foreach (var item in stockItemList)
-                {
-                    CustomMarker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, scene, zone, CustomMarker);
-                    particleCleaner.ClearIfNotCleaned(CustomMarker.ParticleSystem);
-                    EmitParticlePlus(instance, item, instance.psAlly, color, CustomMarker.ParticleSystem, BillboardSizeScale);
-                }
-            }
-        }
-
         private static Material CreateMaterial(WidgetMinimap instance, Scene scene, Zone zone, Material sourceMaterial, MarkerShape markerShape)
         {
             var modMaterial = new Material(sourceMaterial);
@@ -544,6 +241,19 @@ namespace Elin.Plugin.Main.Models.Impl
             return modParticleSystem;
         }
 
+        private static ParticleSystem BuildParticleSystemIfUnbuilt(WidgetMinimap instance, Scene scene, Zone zone, Marker marker)
+        {
+            if (marker.ParticleSystem != null)
+            {
+                return marker.ParticleSystem;
+            }
+
+            var name = $"{Package.Id}_{marker.GetType().Name}";
+            var particleSystem = CreateParticleSystemFromTemplate(instance, scene, zone, instance.psAlly, marker.MarkerShape, name);
+
+            return particleSystem;
+        }
+
         private static void UpdateParticleSystem(WidgetMinimap instance, Scene scene, Zone zone, ParticleSystem particleSystem, MarkerShape markerShape)
         {
             var renderer = particleSystem.GetComponent<ParticleSystemRenderer>();
@@ -564,6 +274,306 @@ namespace Elin.Plugin.Main.Models.Impl
             }
 
             renderer.material = CreateMaterial(instance, scene, zone, shared, markerShape);
+        }
+
+        private static bool TryGetUpStair(Thing thing, MarkerFilter markerFilter, StairsMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsUpStair(thing, setting))
+                {
+                    result = new RefreshElement(thing, setting.UpColor);
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetDownStair(Thing thing, MarkerFilter markerFilter, StairsMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsDownStair(thing, setting))
+                {
+                    result = new RefreshElement(thing, setting.DownColor);
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetMinion(Chara character, Chara playerCharacter, MarkerFilter markerFilter, MarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsMinion(character, playerCharacter, setting))
+                {
+                    result = new RefreshElement(character, setting.Color);
+                    return true;
+                }
+            }
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetPet(Chara character, Chara playerCharacter, MarkerFilter markerFilter, MarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsPet(character, playerCharacter, setting))
+                {
+                    result = new RefreshElement(character, setting.Color);
+                    return true;
+                }
+            }
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetSpecialCharacter(Chara character, MarkerFilter markerFilter, SpecialCharacterMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.SpecialCharacter(character, setting))
+                {
+                    Color color;
+                    switch (character)
+                    {
+                        case { c_bossType: BossType.Boss }:
+                            color = setting.BossColor;
+                            break;
+
+                        case { c_bossType: BossType.Evolved }:
+                            color = setting.EvolvedColor;
+                            break;
+
+                        case { id: ElinId.BigDaddyId }:
+                            color = setting.BigDaddyColor;
+                            break;
+
+                        case { id: ElinId.SantaId }:
+                            color = setting.SantaColor;
+                            break;
+
+                        default:
+                            ModHelper.LogNotExpected([
+                                "character",
+                                $"character.id = {character.id}",
+                                $"character.c_bossType = {character.c_bossType}",
+                            ]);
+                            color = new Color(0, 0, 0, 0);
+                            break;
+                    }
+
+                    result = new RefreshElement(character, color);
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetSpecialThing(Thing thing, MarkerFilter markerFilter, SpecialThingMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsSpecialThing(thing, setting))
+                {
+                    Color color;
+                    switch (thing.id)
+                    {
+                        case ElinId.StatuePower:
+                            color = setting.ShrineColor;
+                            break;
+
+                        case ElinId.WaterJure:
+                            color = setting.JureColor;
+                            break;
+
+                        default:
+                            if (ElinId.SpecialThingGodOnlyIds.Contains(thing.id))
+                            {
+                                color = setting.GodColor;
+                            }
+                            else
+                            {
+                                ModHelper.LogNotExpected([
+                                    "thing",
+                                    $"thing.id = {thing.id}",
+                                ]);
+                                color = new Color(0, 0, 0, 0);
+                            }
+                            break;
+                    }
+
+                    result = new RefreshElement(thing, color);
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetCustomCharacter(Chara character, Chara playerCharacter, MarkerFilter markerFilter, CustomMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsCustomCharacterCandidate(character, playerCharacter, setting))
+                {
+                    if (!CustomHitCache.TryGetCharacter(character, out var isHit))
+                    {
+                        isHit = markerFilter.Judgement.IsCustomElement(character, setting.Character);
+                        CustomHitCache.RegisterCharacter(character, isHit);
+                    }
+                    if (isHit)
+                    {
+                        result = new RefreshElement(character, setting.Character.Color);
+                        return true;
+                    }
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryGetCustomThing(Thing thing, MarkerFilter markerFilter, CustomMarkerSetting setting, out RefreshElement result)
+        {
+            if (setting.IsEnabled)
+            {
+                if (markerFilter.IsCustomThingCandidate(thing, setting))
+                {
+                    if (!CustomHitCache.TryGetThing(thing, out var isHit))
+                    {
+                        isHit = markerFilter.Judgement.IsCustomElement(thing, setting.Thing);
+                        CustomHitCache.RegisterThing(thing, isHit);
+                    }
+                    if (isHit)
+                    {
+                        result = new RefreshElement(thing, setting.Thing.Color);
+                        return true;
+                    }
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static RefreshElements? CreateCustomRefreshElements(IReadOnlyCollection<RefreshElement> customCharacterItems, IReadOnlyCollection<RefreshElement> customThingItems, CustomMarkerSetting setting)
+        {
+            var customItemsCount = customCharacterItems.Count + customThingItems.Count;
+
+            if (customItemsCount == 0)
+            {
+                return null;
+            }
+
+            IReadOnlyCollection<RefreshElement>[] items = setting.PrioritizeThing
+                ? [customCharacterItems, customThingItems]
+                : [customThingItems, customCharacterItems]
+            ;
+            var elements = new List<RefreshElement>(customItemsCount);
+            foreach (var collection in items)
+            {
+                elements.AddRange(collection);
+            }
+            var refreshElements = new RefreshElements(CustomMarker, elements);
+            return refreshElements;
+        }
+
+        private static List<RefreshElements> GetRefreshTargets(Chara playerCharacter, IEnumerable<Chara> characters, IEnumerable<Thing> things, MarkerFilter markerFilter, Setting setting)
+        {
+            var stairUpRefreshElements = new RefreshElements(StairUpMarker);
+            var stairDownRefreshElements = new RefreshElements(StairDownMarker);
+            var minionRefreshElements = new RefreshElements(MinionMarker);
+            var petRefreshElements = new RefreshElements(PetMarker);
+            var specialCharacterRefreshElements = new RefreshElements(SpecialCharacterMarker);
+            var specialThingRefreshElements = new RefreshElements(SpecialThingMarker);
+            // カスタムマーカーは後でごちゃごちゃするのでリストだけ構築
+            var customCharacterItems = new List<RefreshElement>();
+            var customThingItems = new List<RefreshElement>();
+
+            var refreshMarkers = new List<RefreshElements>(Markers.Count)
+            {
+                stairUpRefreshElements,
+                stairDownRefreshElements,
+                minionRefreshElements,
+                petRefreshElements,
+                specialCharacterRefreshElements,
+                specialThingRefreshElements,
+            };
+
+            // キャラクター列挙
+            foreach (var character in characters)
+            {
+                // ミニオン
+                if (TryGetMinion(character, playerCharacter, markerFilter, setting.Minion, out var minionResult))
+                {
+                    minionRefreshElements.Add(minionResult);
+                }
+
+                // ペット
+                if (TryGetPet(character, playerCharacter, markerFilter, setting.Pet, out var petResult))
+                {
+                    petRefreshElements.Add(petResult);
+                }
+
+                // 特別キャラクター
+                if (TryGetSpecialCharacter(character, markerFilter, setting.SpecialCharacter, out var specialCharacterResult))
+                {
+                    specialCharacterRefreshElements.Add(specialCharacterResult);
+                }
+
+                // カスタムキャラクター
+                if (TryGetCustomCharacter(character, playerCharacter, markerFilter, setting.Custom, out var customCharacterResult))
+                {
+                    customCharacterItems.Add(customCharacterResult);
+                }
+            }
+
+            // アイテム列挙
+            foreach (var thing in things)
+            {
+                // 上り階段
+                if (TryGetUpStair(thing, markerFilter, setting.Stairs, out var upStairResult))
+                {
+                    stairUpRefreshElements.Add(upStairResult);
+                }
+
+                // 下り階段
+                if (TryGetDownStair(thing, markerFilter, setting.Stairs, out var downStairResult))
+                {
+                    stairDownRefreshElements.Add(downStairResult);
+                }
+
+                // 特別アイテム
+                if (TryGetSpecialThing(thing, markerFilter, setting.SpecialThing, out var specialThingResult))
+                {
+                    specialThingRefreshElements.Add(specialThingResult);
+                }
+
+                // カスタムアイテム
+                if (TryGetCustomThing(thing, markerFilter, setting.Custom, out var customThingResult))
+                {
+                    customThingItems.Add(customThingResult);
+                }
+            }
+
+            var customRefreshElements = CreateCustomRefreshElements(customCharacterItems, customThingItems, setting.Custom);
+            if (customRefreshElements is not null)
+            {
+                refreshMarkers.Add(customRefreshElements);
+            }
+
+
+            return refreshMarkers;
         }
 
         private static void InvokeReloadIfPossible(WidgetMinimap instance, Scene scene, Zone zone, MapRefreshSetting mapRefreshSetting)
@@ -606,7 +616,7 @@ namespace Elin.Plugin.Main.Models.Impl
             }
 
             // 自拠点無視
-            if (customMarkerSetting.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
+            if (customMarkerSetting.IgnoreSelfZone && ModHelper.Elin.IsSelfZone(zone))
             {
                 return;
             }
@@ -812,6 +822,7 @@ namespace Elin.Plugin.Main.Models.Impl
         {
             Debug.Assert(setting.PointerOver.IsEnabled);
 
+            // MarkerFilter を使うと処理が共通化できるが、判定順序の問題で無駄な処理が発生するので直接処理している、、、が、別に良くないか
             var judgement = new Judgement();
 
             // linq 重いか？ ベンチ取ってないからわからん
@@ -824,7 +835,7 @@ namespace Elin.Plugin.Main.Models.Impl
                 : cells
                     .SelectMany(
                         cell => FilterSearchableCharacters(cell.Charas, judgement)
-                            .Where(a => !a.IsPC && judgement.IsPet(a, playerCharacter))
+                            .Where(a => judgement.IsPet(a, playerCharacter))
                     )
                     .ToArray()
             ;
@@ -836,13 +847,13 @@ namespace Elin.Plugin.Main.Models.Impl
                     .Where(cell => judgement.IsSeen(cell, setting.SpecialCharacter.ShowEvenIfUnseen))
                     .SelectMany(
                         cell => FilterSearchableCharacters(cell.Charas, judgement)
-                            .Where(a => !a.IsPC && judgement.IsSpecialCharacter(a))
+                            .Where(a => judgement.IsSpecialCharacter(a))
                     )
                     .ToArray()
             ;
 
             // 特別アイテム
-            var specialThing = !setting.SpecialThing.IsEnabled || (setting.SpecialThing.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
+            var specialThing = !setting.SpecialThing.IsEnabled || (setting.SpecialThing.IgnoreSelfZone && ModHelper.Elin.IsSelfZone(zone))
                 ? []
                 : cells
                     .Where(cell => judgement.IsSeen(cell, setting.SpecialThing.ShowEvenIfUnseen))
@@ -854,20 +865,20 @@ namespace Elin.Plugin.Main.Models.Impl
             ;
 
             // カスタムキャラクター
-            var customCharacters = !setting.Custom.IsEnabled || (setting.Custom.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
+            var customCharacters = !setting.Custom.IsEnabled || (setting.Custom.IgnoreSelfZone && ModHelper.Elin.IsSelfZone(zone))
                 ? []
                 : cells
                     .Where(cell => judgement.IsSeen(cell, setting.Custom.ShowEvenIfUnseen))
                     .SelectMany(
                         cell => FilterSearchableCharacters(cell.Charas, judgement)
-                            .Where(a => !a.IsPC && judgement.IsCustomCharacterCandidate(a, playerCharacter))
+                            .Where(a => judgement.IsCustomCharacterCandidate(a, playerCharacter))
                             .Where(a => judgement.IsCustomElement(a, setting.Custom.Character))
                     )
                     .ToArray()
             ;
 
             // カスタムアイテム
-            var customThings = !setting.Custom.IsEnabled || (setting.Custom.IgnoreSelfZone && ModHelper.Elin.IsSlefZone(zone))
+            var customThings = !setting.Custom.IsEnabled || (setting.Custom.IgnoreSelfZone && ModHelper.Elin.IsSelfZone(zone))
                 ? []
                 : cells
                     .Where(cell => judgement.IsSeen(cell, setting.Custom.ShowEvenIfUnseen))
@@ -968,7 +979,7 @@ namespace Elin.Plugin.Main.Models.Impl
         internal static void OnActivatePostfix(WidgetMinimap instance, Setting setting)
         {
             var judgement = new Judgement();
-            // 列挙したデータは使用するかこの段階では分からないため実体化しない
+
             var characters = FilterSearchableCharacters(EMono._map.charas, judgement);
             var things = FilterSearchableThings(EMono._map.things, judgement);
 
@@ -1090,48 +1101,26 @@ namespace Elin.Plugin.Main.Models.Impl
             emitSequence = 0;
 
             var judgement = new Judgement();
+            var markerFilter = new MarkerFilter(judgement, EMono._zone);
 
-            var characters = FilterSearchableCharacters(EMono._map.charas, judgement)
-                .ToArray()
-            ;
-            var things = FilterSearchableThings(EMono._map.things, judgement)
-                .ToArray()
-            ;
+            var characters = FilterSearchableCharacters(EMono._map.charas, judgement);
+            var things = FilterSearchableThings(EMono._map.things, judgement);
 
-            // 階段描画
-            if (setting.Stairs.IsEnabled)
+            var refreshMarkers = GetRefreshTargets(EMono.pc, characters, things, markerFilter, setting);
+            foreach (var refreshMarker in refreshMarkers)
             {
-                RefreshStairMarkers(instance, EMono.scene, EMono._zone, EMono.pc, things, judgement, setting.Stairs);
-            }
+                if (refreshMarker.Marker.ParticleSystem == null && refreshMarker.Elements.Count == 0)
+                {
+                    continue;
+                }
 
-            // ミニオン描画
-            if (setting.Minion.IsEnabled)
-            {
-                RefreshMinionMarkers(instance, EMono.scene, EMono._zone, EMono.pc, characters, judgement, setting.Minion);
-            }
+                refreshMarker.Marker.ParticleSystem = BuildParticleSystemIfUnbuilt(instance, EMono.scene, EMono._zone, refreshMarker.Marker);
+                refreshMarker.Marker.ParticleSystem.Clear();
 
-            // ペット描画
-            if (setting.Pet.IsEnabled)
-            {
-                RefreshPetMarkers(instance, EMono.scene, EMono._zone, EMono.pc, characters, judgement, setting.Pet);
-            }
-
-            // 特殊キャラクター描画
-            if (setting.SpecialCharacter.IsEnabled)
-            {
-                RefreshSpecialCharacterMarkers(instance, EMono.scene, EMono._zone, EMono.pc, characters, judgement, setting.SpecialCharacter);
-            }
-
-            // 特殊アイテム描画
-            if (setting.SpecialThing.IsEnabled)
-            {
-                RefreshSpecialThingMarkers(instance, EMono.scene, EMono._zone, EMono.pc, things, judgement, setting.SpecialThing);
-            }
-
-            // カスタム描画
-            if (setting.Custom.IsEnabled)
-            {
-                RefreshCustomMarkers(instance, EMono.scene, EMono._zone, EMono.pc, characters, things, judgement, setting.Custom);
+                foreach (var element in refreshMarker.Elements)
+                {
+                    EmitParticlePlus(instance, element.Target, instance.psAlly, element.Color, refreshMarker.Marker.ParticleSystem, BillboardSizeScale);
+                }
             }
 
             // PC再描画
@@ -1154,7 +1143,7 @@ namespace Elin.Plugin.Main.Models.Impl
 
             foreach (var marker in Markers)
             {
-                if (marker.ParticleSystem is not null)
+                if (marker.ParticleSystem != null)
                 {
                     UpdateParticleSystem(instance, EMono.scene, EMono._zone, marker.ParticleSystem, marker.MarkerShape);
                 }
