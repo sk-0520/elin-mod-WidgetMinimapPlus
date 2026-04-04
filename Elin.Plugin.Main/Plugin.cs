@@ -3,7 +3,6 @@ using Elin.Plugin.Generated;
 using Elin.Plugin.Main.Models.Settings;
 using Elin.Plugin.Main.PluginHelpers;
 using HarmonyLib;
-using Newtonsoft.Json;
 
 // Mod 用テンプレート組み込み想定
 
@@ -34,12 +33,7 @@ namespace Elin.Plugin.Main
         {
             var setting = LoadConfig();
             Setting.Instance = setting;
-
-            ModHelper.DoDebug(() =>
-            {
-                var json = JsonConvert.SerializeObject(setting, Formatting.Indented);
-                ModHelper.WriteDebug(json);
-            });
+            // 設定のビルド自体はプロファイル読み込み時に行う
         }
 
         /// <summary>
@@ -73,30 +67,4 @@ namespace Elin.Plugin.Main
 
         #endregion
     }
-
-#if DEBUG
-
-    // 以下はパッチ適用のサンプル。
-
-    [HarmonyPatch(typeof(Scene))]
-    public class ScenePatch
-    {
-        #region function
-
-        [HarmonyPatch(nameof(Scene.Init), new[] { typeof(Scene.Mode) })]
-        [HarmonyPostfix]
-        public static void InitPostfix(Scene.Mode newMode)
-        {
-            if (newMode == Scene.Mode.StartGame)
-            {
-                ModHelper.LogDebug("DEBUG START");
-                ModHelper.LogDebug(ModHelper.ToStringFromInformation());
-            }
-        }
-
-        #endregion
-    }
-
-#endif
-
 }
