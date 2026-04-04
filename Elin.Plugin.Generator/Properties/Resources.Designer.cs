@@ -239,5 +239,23 @@ namespace Elin.Plugin.Generator.Properties {
                 return ResourceManager.GetString("EPG010_B_Message", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Assembly name is not configured に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string EPG011_A_Title {
+            get {
+                return ResourceManager.GetString("EPG011_A_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Please set the assembly name in Directory.Build.props.user に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string EPG011_B_Message {
+            get {
+                return ResourceManager.GetString("EPG011_B_Message", resourceCulture);
+            }
+        }
     }
 }

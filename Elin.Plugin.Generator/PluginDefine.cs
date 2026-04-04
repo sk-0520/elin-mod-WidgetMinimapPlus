@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 
 namespace Elin.Plugin.Generator
 {
     public record class PluginMacro
     {
         public string ElinModulePath { get; set; } = string.Empty;
+        public string AssemblyName { get; set; } = string.Empty;
     }
 
     internal class PluginPackage
@@ -27,7 +28,6 @@ namespace Elin.Plugin.Generator
     {
         #region property
 
-        public string Name { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
         public bool UseDebugId { get; set; }
         public string Log { get; set; } = string.Empty;

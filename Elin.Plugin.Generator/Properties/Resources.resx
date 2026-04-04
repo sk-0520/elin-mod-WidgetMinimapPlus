@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -176,5 +176,11 @@
   </data>
   <data name="EPG010_B_Message" xml:space="preserve">
     <value>[{0}] The message parameter '{2}' in the base language for '{1}' must also be included for language '{3}'</value>
+  </data>
+  <data name="EPG011_A_Title" xml:space="preserve">
+    <value>Assembly name is not configured</value>
+  </data>
+  <data name="EPG011_B_Message" xml:space="preserve">
+    <value>Please set the assembly name in Directory.Build.props.user</value>
   </data>
 </root>

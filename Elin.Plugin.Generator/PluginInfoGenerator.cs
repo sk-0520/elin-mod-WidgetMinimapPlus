@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using System;
 using System.IO;
 using System.Linq;
@@ -27,34 +27,40 @@ namespace Elin.Plugin.Generator
                 })
             ;
 
-            var elinModuleProvider = context.AnalyzerConfigOptionsProvider
+            var macroProvider = context.AnalyzerConfigOptionsProvider
                 .Select((configOptions, token) =>
                 {
+                    var macro = new PluginMacro();
+
                     if (configOptions.GlobalOptions.TryGetValue("build_property.ElinPath", out var elinPath))
                     {
-                        var path = Path.Combine(elinPath, "Elin_Data", "Managed", "Elin.dll");
-                        return path;
+                        //TODO: 今後使う予定。使えればいいな。使えねぇなぁ。
+                        macro.ElinModulePath = Path.Combine(elinPath, "Elin_Data", "Managed", "Elin.dll");
+                    }
+                    if (configOptions.GlobalOptions.TryGetValue("build_property.AssemblyName", out var assemblyName))
+                    {
+                        macro.AssemblyName = assemblyName;
                     }
 
-                    return null;
+                    return macro;
                 })
             ;
 
-            context.RegisterSourceOutput(define.Combine(elinModuleProvider), (c, x) =>
+            context.RegisterSourceOutput(define.Combine(macroProvider), (c, x) =>
             {
                 var define = x.Left;
-                var elinModulePath = x.Right;
+                var macro = x.Right;
                 if (define == null)
                 {
                     return;
                 }
 
                 /*
-                TODO: バージョンとって来たかったけど、どこで定義されてるか分からんし、アセンブリから取れるのかもわからん
+                //TODO: バージョンとって来たかったけど、どこで定義されてるか分からんし、アセンブリから取れるのかもわからん
                 var elinVersion = define.Package.ElinVersion;
                 if (elinVersion == GeneratorConstants.ForceLatestElinVersion)
                 {
-                    if (File.Exists(elinModulePath))
+                    if (File.Exists(macro.ElinModulePath))
                     {
                         // バージョンってどこで定義されてんねん
                     }
@@ -64,6 +70,16 @@ namespace Elin.Plugin.Generator
                     throw new InvalidOperationException($"最新バージョン指定にもかかわらず、 Elin からバージョン情報を取得できなかった");
                 }
                 */
+
+                if (string.IsNullOrEmpty(macro.AssemblyName) || macro.AssemblyName.IndexOfAny(['\\', '/', ':', '*', '?', '\"', '<', '>', '|']) != -1)
+                {
+                    c.ReportDiagnostic(Diagnostic.Create(
+                        DiagnosticDescriptors.EPG011,
+                        Location.None
+                    ));
+                    return;
+                }
+
 
                 var sourceBuilder = new SourceBuilder();
 
@@ -242,8 +258,9 @@ namespace Elin.Plugin.Generator
                     {{docHeader("mod", "name")}}
                     /// <remarks>
                     /// <para>MOD の内部名です。</para>
+                    /// <para>アセンブリ名を参照しています。</para>
                     /// </remarks>
-                    public const string Name = {{sourceBuilder.ToStringLiteral(define.Mod.Name)}};
+                    public const string Name = {{sourceBuilder.ToStringLiteral(macro.AssemblyName)}};
                     {{docHeader("mod", "version")}}
                     /// <remarks>
                     /// <para>作成している MOD のバージョンです。</para>

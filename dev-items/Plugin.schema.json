@@ -105,17 +105,12 @@
       "type": "object",
       "description": "Mod 固有情報",
       "required": [
-        "name",
         "version",
         "useDebugId",
         "log"
       ],
       "additionalProperties": false,
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "内部名, ModHelper から使用したり、そんな感じ"
-        },
         "version": {
           "type": "string",
           "description": "Mod のバージョン (major.minor.patch)",

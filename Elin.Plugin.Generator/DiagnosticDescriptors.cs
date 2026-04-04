@@ -1,4 +1,4 @@
-﻿using Elin.Plugin.Generator.Properties;
+using Elin.Plugin.Generator.Properties;
 using Microsoft.CodeAnalysis;
 
 namespace Elin.Plugin.Generator
@@ -96,6 +96,16 @@ namespace Elin.Plugin.Generator
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true
         );
+
+        public static readonly DiagnosticDescriptor EPG011 = new DiagnosticDescriptor(
+            id: "EPG011",
+            title: new LocalizableResourceString(nameof(Resources.EPG011_A_Title), Resources.ResourceManager, typeof(Resources)),
+            messageFormat: new LocalizableResourceString(nameof(Resources.EPG011_B_Message), Resources.ResourceManager, typeof(Resources)),
+            category: "Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true
+        );
+
         #endregion
     }
 }

@@ -18,6 +18,7 @@
 		<AdditionalFiles Include="..\Plugin.json" />
 		<AdditionalFiles Include="..\Localization.json" />
 		<CompilerVisibleProperty Include="ElinPath" />
+		<CompilerVisibleProperty Include="AssemblyName" />
 	</ItemGroup>
 	
 	<ItemGroup>

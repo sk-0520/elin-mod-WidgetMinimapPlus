@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Items/">
-    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.props.user" />
+    <File Path="Directory.Build.targets.user" />
     <File Path="exclusion.dic" />
     <File Path="README.md" />
   </Folder>

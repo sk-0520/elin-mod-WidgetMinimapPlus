@@ -177,4 +177,10 @@
   <data name="EPG010_B_Message" xml:space="preserve">
     <value>[{0}] '{1}' の基準言語内のメッセージパラメーター '{2}' を言語 '{3}' 含める必要があります</value>
   </data>
+  <data name="EPG011_A_Title" xml:space="preserve">
+    <value>アセンブリ名が設定されいません</value>
+  </data>
+  <data name="EPG011_B_Message" xml:space="preserve">
+    <value>アセンブリ名を Directory.Build.props.user で設定してください</value>
+  </data>
 </root>
