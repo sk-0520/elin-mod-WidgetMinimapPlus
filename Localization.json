@@ -126,6 +126,11 @@
       "EN": "Item",
       "CN": "物品"
     },
+    "settingCustomDialogDetail": {
+      "JP": "名前(もしくはID)をカンマ区切りで入力する。\r\n通常入力した文言は部分一致で大文字小文字を区別する。\r\n正規表現を使用する場合は /パターン/ の形で入力する。\r\n正規表現オプションは次の通り i:大文字小文字を無視 x:パターン内の空白を無視",
+      "EN": "Enter names (or IDs) separated by commas.\r\nNormal input uses partial matching and is case-sensitive.\r\nTo use regular expressions, enter in the form /pattern/.\r\nRegular expression options are as follows: i: ignore case, x: ignore whitespace in pattern",
+      "CN": "用逗号分隔输入名称（或ID）。\r\n通常输入按“部分匹配”处理，并区分大小写。\r\n使用正则表达式时，请按 /模式/ 的形式输入。\r\n正则表达式选项如下：i：忽略大小写，x：忽略模式中的空白"
+    },
     "settingMapRefresh": {
       "JP": "マップ更新",
       "EN": "Map Refresh",

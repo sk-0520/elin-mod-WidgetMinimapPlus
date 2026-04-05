@@ -63,6 +63,8 @@ namespace Elin.Plugin.Main.Models
             new Color(0.902f, 0.784f, 1f, 1f),         // Lavender (230,200,255)
         };
 
+        private Func<Dialog>? PreparedInputDialog { get; set; }
+
         #endregion
 
         #region function
@@ -320,9 +322,12 @@ namespace Elin.Plugin.Main.Models
 
         private void ApplyCustomMenu(UIContextMenu parentMenu, CustomMarkerSetting setting)
         {
-            void InputDialog(string current, Action<string> inputed)
+            void PrepareInputDialog(string message, string current, Action<string> inputed)
             {
-                Dialog.InputName(string.Empty, current, (cancel, text) =>
+                // ダイアログを開く都合上、
+                // ダイアログを開く → ダイアログにフォーカス → メニューが閉じられる → フォーカスが外れる の悲しい輪廻を回避
+                ParentMenu.onDestroy += OnDestroy;
+                PreparedInputDialog = () => Dialog.InputName(message, current, (cancel, text) =>
                 {
                     if (!cancel)
                     {
@@ -330,6 +335,7 @@ namespace Elin.Plugin.Main.Models
                         ApplySetting(true);
                     }
                 }, Dialog.InputType.Default);
+                ParentMenu.Root.Hide();
             }
 
             var currentMenu = parentMenu.AddChild(ModHelper.Lang.General.SettingCustom);
@@ -348,7 +354,7 @@ namespace Elin.Plugin.Main.Models
             var characterMenu = currentMenu.AddChild(ModHelper.Lang.General.SettingCustomCharacter);
             characterMenu.AddButton(ModHelper.Lang.Formatter.FormatSettingCustomEdit(value: setting.Character.Csv), () =>
             {
-                InputDialog(setting.Character.Csv, a => setting.Character.Csv = a);
+                PrepareInputDialog(ModHelper.Lang.General.SettingCustomDialogDetail, setting.Character.Csv, a => setting.Character.Csv = a);
             });
             characterMenu.AddSeparator();
             AddColorMenus(characterMenu, true, true, setting.Character.Color, a =>
@@ -360,7 +366,7 @@ namespace Elin.Plugin.Main.Models
             var thingMenu = currentMenu.AddChild(ModHelper.Lang.General.SettingCustomThing);
             thingMenu.AddButton(ModHelper.Lang.Formatter.FormatSettingCustomEdit(value: setting.Thing.Csv), () =>
             {
-                InputDialog(setting.Thing.Csv, a => setting.Thing.Csv = a);
+                PrepareInputDialog(ModHelper.Lang.General.SettingCustomDialogDetail, setting.Thing.Csv, a => setting.Thing.Csv = a);
             });
             thingMenu.AddSeparator();
             AddColorMenus(thingMenu, true, true, setting.Thing.Color, a =>
@@ -501,5 +507,15 @@ namespace Elin.Plugin.Main.Models
         }
 
         #endregion
+
+        private void OnDestroy()
+        {
+            ParentMenu.onDestroy -= OnDestroy;
+            if (PreparedInputDialog is not null)
+            {
+                PreparedInputDialog();
+            }
+        }
+
     }
 }
