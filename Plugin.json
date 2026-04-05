@@ -2,7 +2,7 @@
   "$schema": "./dev-items/Plugin.schema.json",
   "package": {
     "title": "WidgetMinimap [*]",
-    "id": "widgetminimapplus",
+    "id": "sk.widgetminimapplus",
     "author": "sk",
     "loadPriority": 100,
     "elinVersion": "0.23.282",
@@ -24,7 +24,7 @@
       "通常は(*)項目について目視済みの物だけ表示されますが、設定を変更することで常時表示可能になります。",
       "",
       "[設定ファイル]",
-      "Elin\\BepInEx\\config\\widgetminimapplus.cfg",
+      "Elin\\BepInEx\\config\\sk.widgetminimapplus.cfg",
       "",
       "[既知の問題]",
       "* ミニマップとツールチップが重なる",
