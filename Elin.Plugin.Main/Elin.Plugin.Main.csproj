@@ -15,18 +15,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="**\*.ModTemplate.cs">
+			<DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.ModTemplate','')).cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 		<AdditionalFiles Include="..\Plugin.json" />
 		<AdditionalFiles Include="..\Localization.json" />
 		<CompilerVisibleProperty Include="ElinPath" />
 		<CompilerVisibleProperty Include="AssemblyName" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Using Include="UnityEngine" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-	  <Folder Include="%40Assets\ModHelp\" />
+		<Folder Include="%40Assets\ModHelp\" />
 	</ItemGroup>
 
 	<Target Name="RemoveFiles" BeforeTargets="BeforeBuild">
