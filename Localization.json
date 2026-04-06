@@ -2,9 +2,9 @@
   "$schema": "./dev-items/localization.schema.json",
   "general": {
     "nearbyPets": {
-      "JP": "周辺のペット",
-      "EN": "Nearby Pets",
-      "CN": "附近的宠物"
+      "JP": "周辺の仲間",
+      "EN": "Nearby Ally",
+      "CN": "附近的伙伴"
     },
     "nearbySpecialCharacters": {
       "JP": "周辺の特別なNPC",
@@ -87,9 +87,9 @@
       "CN": "仆从"
     },
     "settingPet": {
-      "JP": "ペット",
-      "EN": "Pet",
-      "CN": "宠物"
+      "JP": "仲間",
+      "EN": "Ally",
+      "CN": "伙伴"
     },
     "settingSpecialCharacter": {
       "JP": "特別なNPC",
