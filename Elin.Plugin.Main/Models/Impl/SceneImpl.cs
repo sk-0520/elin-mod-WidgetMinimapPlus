@@ -15,11 +15,11 @@ namespace Elin.Plugin.Main.Models.Impl
                 // プラグイン読み込み時にはまだ設定のビルドを行っていないため、プロファイル開始時のこのタイミングで実施
                 setting.Build(true);
 
-                ModHelper.LogDebug(ModHelper.ToStringFromInformation());
-                ModHelper.DoDebug(() =>
+                ModHelper.LogDev(ModHelper.ToStringFromInformation());
+                ModHelper.DoDev(() =>
                 {
                     var json = JsonConvert.SerializeObject(setting, Formatting.Indented);
-                    ModHelper.WriteDebug(json);
+                    ModHelper.WriteDev(json);
                 });
             }
         }

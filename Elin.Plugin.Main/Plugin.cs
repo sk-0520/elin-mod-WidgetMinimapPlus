@@ -1,4 +1,5 @@
 using Elin.Plugin.Main.Models.Settings;
+using Elin.Plugin.Main.PluginHelpers;
 using HarmonyLib;
 
 // Mod 用テンプレート組み込み想定
@@ -34,7 +35,13 @@ namespace Elin.Plugin.Main
             //NOP
         }
 
-
+#if DEBUG
+        public void PHL()
+        {
+            ModHelper.LogDev("PHL!");
+            Setting.Instance.Build(ModHelper.CanOutputMessage);
+        }
+#endif
 
         #endregion
     }

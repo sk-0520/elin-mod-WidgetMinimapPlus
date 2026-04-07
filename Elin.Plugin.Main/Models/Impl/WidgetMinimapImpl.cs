@@ -81,7 +81,7 @@ namespace Elin.Plugin.Main.Models.Impl
 
         private static void Reset(WidgetMinimap instance)
         {
-            ModHelper.LogDebug("Resetting minimap markers");
+            ModHelper.LogDev("Resetting minimap markers");
 
             emitSequence = 0; // これは意味ないけど一応ね
 
@@ -581,13 +581,13 @@ namespace Elin.Plugin.Main.Models.Impl
 
             if (!mapRefreshSetting.IsEnabled)
             {
-                ModHelper.WriteDebug("設定により抑制");
+                ModHelper.WriteDev("設定により抑制");
                 return;
             }
 
             if (ModHelper.Elin.IsGlobalMap(scene, zone))
             {
-                ModHelper.WriteDebug("グローバル無視");
+                ModHelper.WriteDev("グローバル無視");
                 return;
             }
 
@@ -597,7 +597,7 @@ namespace Elin.Plugin.Main.Models.Impl
             ;
             var interval = breakpointSetting?.Interval ?? mapRefreshSetting.FallbackInterval;
 
-            ModHelper.LogDebug($"{nameof(instance.InvokeRepeating)} {nameof(instance.Reload)}: {nameof(interval)}: {interval}, {nameof(instance.Size)}: {instance.Size}");
+            ModHelper.LogDev($"{nameof(instance.InvokeRepeating)} {nameof(instance.Reload)}: {nameof(interval)}: {interval}, {nameof(instance.Size)}: {instance.Size}");
             instance.InvokeRepeating(
                 nameof(instance.Reload),
                 2, // 初期待機時間は少しだけ待つ(相手は人間なので即時でなんかするとも思えない)
@@ -664,7 +664,7 @@ namespace Elin.Plugin.Main.Models.Impl
             }
 
 #if DEBUG
-            ModHelper.WriteDebug($"<Build> {stopwatch.ElapsedMilliseconds} ms");
+            ModHelper.LogDev($"<Build> {stopwatch.ElapsedMilliseconds} ms");
 #else
             ModHelper.Logger.LogInfo($"<Build> {stopwatch.ElapsedMilliseconds} ms");
 #endif
@@ -1065,7 +1065,7 @@ namespace Elin.Plugin.Main.Models.Impl
                 return true;
             }
 
-            ModHelper.LogDebug("マップクリック検知からの強制移動");
+            ModHelper.LogDev("マップクリック検知からの強制移動");
 
             // [ELIN:WidgetMinimap.OnPointerDown]
             // -> EMono.pc.SetAIImmediate(new AI_Goto(pos, 0));
