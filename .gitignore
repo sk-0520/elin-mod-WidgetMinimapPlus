@@ -47,4 +47,5 @@ msbuild.wrn
 /dev-items/debug-dll
 TestResult/
 *.lnk
+Plugin.dev.json
 
