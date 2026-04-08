@@ -839,8 +839,8 @@ namespace Elin.Plugin.Main.Models.Impl
                     .ToArray()
             ;
 
-            // 特別キャラクター
-            var specialCharacters = !setting.SpecialCharacter.IsEnabled || ModHelper.Elin.IsDefenseGame(zone)
+            // 特別キャラクター(戦争中でもツールチップ表示はOK)
+            var specialCharacters = !setting.SpecialCharacter.IsEnabled
                 ? []
                 : cells
                     .Where(cell => judgement.IsSeen(cell, setting.SpecialCharacter.ShowEvenIfUnseen))
