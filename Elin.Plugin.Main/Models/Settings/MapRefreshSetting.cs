@@ -1,4 +1,4 @@
-﻿using Elin.Plugin.Generated;
+using Elin.Plugin.Generated;
 using System;
 
 namespace Elin.Plugin.Main.Models.Settings
@@ -22,7 +22,7 @@ namespace Elin.Plugin.Main.Models.Settings
         [RangePluginConfig(SettingDefine.MinimumPrimitiveInterval, SettingDefine.MaximumPrimitiveInterval)]
         public virtual double PrimitiveInterval { get; set; }
 
-        /// <inheritdoc cref="Interval"/>
+        /// <inheritdoc cref="PrimitiveInterval"/>
         [IgnorePluginConfig]
         public TimeSpan Interval
         {
