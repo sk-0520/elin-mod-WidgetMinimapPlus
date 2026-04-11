@@ -11,7 +11,7 @@ namespace Elin.Plugin.Main.Models.Impl
     {
         #region define
 
-        private const float BillboardSizeScale = 30.4f;
+        private const float BillboardSizeScale = 3.4f;
 
         #endregion
 
