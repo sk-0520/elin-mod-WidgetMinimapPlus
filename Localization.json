@@ -1,6 +1,11 @@
 {
   "$schema": "./dev-items/localization.schema.json",
   "general": {
+    "treasureChest": {
+      "JP": "宝箱",
+      "EN": "Treasure Chest",
+      "CN": "宝箱"
+    },
     "nearbyPets": {
       "JP": "周辺の仲間",
       "EN": "Nearby Ally",

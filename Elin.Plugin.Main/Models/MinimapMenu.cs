@@ -289,6 +289,13 @@ namespace Elin.Plugin.Main.Models
                 ApplySetting(false);
             });
 
+            var treasureChestMenu = currentMenu.AddChild(ModHelper.Lang.General.TreasureChest);
+            AddColorMenus(treasureChestMenu, true, true, setting.TreasureChestColor, a =>
+            {
+                setting.TreasureChestColor = a;
+                ApplySetting(false);
+            });
+
             var statuePowerRow = EClass.sources.cards.map[ElinId.StatuePower];
             var shrineMenu = currentMenu.AddChild(statuePowerRow.GetName());
             AddColorMenus(shrineMenu, true, true, setting.ShrineColor, a =>

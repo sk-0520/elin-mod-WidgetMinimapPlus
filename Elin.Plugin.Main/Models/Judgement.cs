@@ -156,6 +156,13 @@ namespace Elin.Plugin.Main.Models
                 return false;
             }
 
+            // 宝箱判定
+            if (ElinId.SpecialThingTreasureChestIds.Contains(target.id))
+            {
+                // 中身の有無で要不要判定
+                return 0 < target.things.Count;
+            }
+
             // 使用済みのものは不要
             if (!target.trait.owner.isOn)
             {

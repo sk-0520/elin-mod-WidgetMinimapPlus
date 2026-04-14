@@ -395,7 +395,11 @@ namespace Elin.Plugin.Main.Models.Impl
                             break;
 
                         default:
-                            if (ElinId.SpecialThingGodOnlyIds.Contains(thing.id))
+                            if (ElinId.SpecialThingTreasureChestIds.Contains(thing.id))
+                            {
+                                color = setting.TreasureChestColor;
+                            }
+                            else if (ElinId.SpecialThingGodOnlyIds.Contains(thing.id))
                             {
                                 color = setting.GodColor;
                             }
