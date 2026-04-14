@@ -42,10 +42,15 @@ namespace Elin.Plugin.Main.Models
         /// <remarks>SourceCard.xlsx!Thing</remarks>
         public const string TreasureChestNormal = "chest3";
         /// <summary>
+        /// [特殊アイテム] 真珠貝。
+        /// </summary>
+        /// <remarks>SourceCard.xlsx!Thing</remarks>
+        public const string TreasureChestPearl = "pearl_oyster";
+        /// <summary>
         /// [特殊アイテム] 豪華な宝箱。
         /// </summary>
         /// <remarks>SourceCard.xlsx!Thing</remarks>
-        public const string BossChestGorgeous = "chest_boss";
+        public const string TreasureChestBoss = "chest_boss";
         /// <summary>
         /// [特殊アイテム] 神秘的な宝箱。
         /// </summary>
@@ -114,8 +119,9 @@ namespace Elin.Plugin.Main.Models
         /// [特殊アイテム] 宝箱一覧。
         /// </summary>
         public static readonly IReadOnlyList<string> SpecialThingTreasureChestIds = [
-            TreasureChestNormal ,
-            BossChestGorgeous,
+            TreasureChestNormal,
+            TreasureChestPearl,
+            TreasureChestBoss,
             TreasureChestGorgeous,
         ];
 
