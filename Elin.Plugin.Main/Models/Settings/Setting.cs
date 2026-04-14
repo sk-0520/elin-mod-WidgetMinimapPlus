@@ -66,6 +66,7 @@ namespace Elin.Plugin.Main.Models.Settings
             ShowEvenIfUnseen = false,
             IgnoreSelfZone = true,
             ShrineColor = new Color(1.0f, 0.85f, 0.45f),
+            TreasureChestColor = new Color(1.0f, 0.5f, 0.0f, 0.8f),
             GodColor = new Color(1.0f, 1.0f, 0.0f),
             JureColor = new Color(0, 1, 0),
         };

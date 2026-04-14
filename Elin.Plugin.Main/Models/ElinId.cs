@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Elin.Plugin.Main.Models
 {
@@ -11,7 +11,8 @@ namespace Elin.Plugin.Main.Models
         static ElinId()
         {
             // SpecialThingIds の構築
-            var specialThingIds = new List<string>(SpecialThingGodOnlyIds.Count + SpecialThingOtherIds.Count);
+            var specialThingIds = new List<string>(SpecialThingTreasureChestIds.Count + SpecialThingGodOnlyIds.Count + SpecialThingOtherIds.Count);
+            specialThingIds.AddRange(SpecialThingTreasureChestIds);
             specialThingIds.AddRange(SpecialThingGodOnlyIds);
             specialThingIds.AddRange(SpecialThingOtherIds);
             SpecialThingIds = specialThingIds;
@@ -34,6 +35,23 @@ namespace Elin.Plugin.Main.Models
         /// 特殊キャラクター一覧。
         /// </summary>
         public static readonly string[] SpecialCharacterIds = [BigDaddyId, SantaId];
+
+        /// <summary>
+        /// [特殊アイテム] 宝箱。
+        /// </summary>
+        /// <remarks>SourceCard.xlsx!Thing</remarks>
+        public const string TreasureChestNormal = "chest3";
+        /// <summary>
+        /// [特殊アイテム] 豪華な宝箱。
+        /// </summary>
+        /// <remarks>SourceCard.xlsx!Thing</remarks>
+        public const string BossChestGorgeous = "chest_boss";
+        /// <summary>
+        /// [特殊アイテム] 神秘的な宝箱。
+        /// </summary>
+        /// <remarks>SourceCard.xlsx!Thing</remarks>
+        public const string TreasureChestGorgeous = "chest_treasure";
+
 
         /// <summary>
         /// [特殊アイテム] 癒しの女神像。
@@ -91,6 +109,15 @@ namespace Elin.Plugin.Main.Models
         /// <para>見たことないから知らん。</para>
         /// </remarks>
         public const string WaterJure = "water_jure";
+
+        /// <summary>
+        /// [特殊アイテム] 宝箱一覧。
+        /// </summary>
+        public static readonly IReadOnlyList<string> SpecialThingTreasureChestIds = [
+            TreasureChestNormal ,
+            BossChestGorgeous,
+            TreasureChestGorgeous,
+        ];
 
         /// <summary>
         /// [特殊アイテム] 神像一覧。

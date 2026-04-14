@@ -1,4 +1,4 @@
-﻿using Elin.Plugin.Main.Converters;
+using Elin.Plugin.Main.Converters;
 using Newtonsoft.Json;
 
 namespace Elin.Plugin.Main.Models.Settings
@@ -31,6 +31,12 @@ namespace Elin.Plugin.Main.Models.Settings
         /// </summary>
         [JsonConverter(typeof(UnityColorConverter))]
         public virtual Color ShrineColor { get; set; }
+
+        /// <summary>
+        /// 宝箱の色。
+        /// </summary>
+        [JsonConverter(typeof(UnityColorConverter))]
+        public virtual Color TreasureChestColor { get; set; }
 
         /// <summary>
         /// 神像の色。
