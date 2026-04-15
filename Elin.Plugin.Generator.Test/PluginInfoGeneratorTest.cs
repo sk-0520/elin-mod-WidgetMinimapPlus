@@ -4,9 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace Elin.Plugin.Generator.Test
 {
@@ -289,9 +287,6 @@ namespace Elin.Plugin.Generator.Test
         [Fact]
         public void PluginDevJsonTest()
         {
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            var pluginDevJsonDirectoryPath = Path.Combine(Path.GetDirectoryName(assemblyLocation)!, nameof(PluginInfoGeneratorTest), nameof(PluginDevJsonTest));
-
             var generator = new PluginInfoGenerator();
             var driver = CSharpGeneratorDriver.Create(
                 [
@@ -302,7 +297,7 @@ namespace Elin.Plugin.Generator.Test
                 ,
                 additionalTexts: [
                     new TestAdditionalText(
-                        Path.Combine(pluginDevJsonDirectoryPath, "Plugin.json"),
+                        @"Z:\NUL\Plugin.json",
                         //lang=json,strict
                         """
                         {
@@ -326,6 +321,15 @@ namespace Elin.Plugin.Generator.Test
                                 "useDebugId": true,
                                 "log": "NUL"
                             }
+                        }
+                        """
+                    ),
+                    new TestAdditionalText(
+                        @"Z:\NUL\Plugin.dev.json",
+                        //lang=json,strict
+                        """
+                        {
+                            "log": "dev.log"
                         }
                         """
                     )
