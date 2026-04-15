@@ -1,5 +1,7 @@
 # WidgetMinimap [\*]
 
+<https://steamcommunity.com/sharedfiles/filedetails/?id=3704646011>
+
 [Elin](https://store.steampowered.com/app/2135150/Elin/) の ミニマップを少しだけ拡張する Mod です。
 
 Mod 作成のお勉強と Mod 作成用テンプレートの構築を目指しつつ作成しました。
