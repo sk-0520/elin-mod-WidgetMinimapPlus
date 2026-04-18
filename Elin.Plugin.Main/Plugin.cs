@@ -39,7 +39,7 @@ namespace Elin.Plugin.Main
         public void PHL()
         {
             ModHelper.LogDev("PHL!");
-            Setting.Instance.Build(ModHelper.CanOutputMessage);
+            Setting.Instance.Build(MessageHelper.CanOutputMessage);
         }
 #endif
 

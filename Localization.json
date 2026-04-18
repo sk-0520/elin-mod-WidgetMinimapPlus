@@ -1,184 +1,184 @@
 {
-  "$schema": "./dev-items/localization.schema.json",
+  "$schema": "./dev-items/Localization.schema.json",
   "general": {
-    "treasureChest": {
+    "TreasureChest": {
       "JP": "宝箱",
       "EN": "Treasure Chest",
       "CN": "宝箱"
     },
-    "nearbyPets": {
+    "NearbyPets": {
       "JP": "周辺の仲間",
       "EN": "Nearby Ally",
       "CN": "附近的伙伴"
     },
-    "nearbySpecialCharacters": {
+    "NearbySpecialCharacters": {
       "JP": "周辺の特別なNPC",
       "EN": "Nearby Special NPCs",
       "CN": "附近的特殊NPC"
     },
-    "nearbySpecialThing": {
+    "NearbySpecialThing": {
       "JP": "周辺の特別なアイテム",
       "EN": "Nearby Special Items",
       "CN": "附近的特殊物品"
     },
-    "nearbyCustomCharacters": {
+    "NearbyCustomCharacters": {
       "JP": "周辺のカスタムNPC",
       "EN": "Nearby Custom NPCs",
       "CN": "附近的自定义NPC"
     },
-    "nearbyCustomItems": {
+    "NearbyCustomItems": {
       "JP": "周辺のカスタムアイテム",
       "EN": "Nearby Custom Items",
       "CN": "附近的自定义物品"
     },
-    "settingCommonIsEnabled": {
+    "SettingCommonIsEnabled": {
       "JP": "有効",
       "EN": "Enabled",
       "CN": "启用"
     },
-    "settingCommonIgnoreSelfZone": {
+    "SettingCommonIgnoreSelfZone": {
       "JP": "自拠点では無視する",
       "EN": "Ignore When In Own Base",
       "CN": "在自己的据点忽略"
     },
-    "settingCommonShowEvenIfUnseen": {
+    "SettingCommonShowEvenIfUnseen": {
       "JP": "未確認でも表示",
       "EN": "Show Even If Unseen",
       "CN": "即使未确认也显示"
     },
-    "settingCommonBreakpointSmall": {
+    "SettingCommonBreakpointSmall": {
       "JP": "小マップ",
       "EN": "Small Map",
       "CN": "小地图"
     },
-    "settingCommonBreakpointMedium": {
+    "SettingCommonBreakpointMedium": {
       "JP": "中マップ",
       "EN": "Medium Map",
       "CN": "中地图"
     },
-    "settingCommonBreakpointLarge": {
+    "SettingCommonBreakpointLarge": {
       "JP": "大マップ",
       "EN": "Large Map",
       "CN": "大地图"
     },
-    "settingCommonBreakpointFallback": {
+    "SettingCommonBreakpointFallback": {
       "JP": "上記以外",
       "EN": "Other",
       "CN": "其他"
     },
-    "settingCommonColorList": {
+    "SettingCommonColorList": {
       "JP": "色一覧",
       "EN": "Color List",
       "CN": "颜色列表"
     },
-    "settingStairs": {
+    "SettingStairs": {
       "JP": "階段",
       "EN": "Stairs",
       "CN": "楼梯"
     },
-    "settingStairsUp": {
+    "SettingStairsUp": {
       "JP": "上り階段",
       "EN": "Upstairs",
       "CN": "上楼梯"
     },
-    "settingStairsDown": {
+    "SettingStairsDown": {
       "JP": "下り階段",
       "EN": "Downstairs",
       "CN": "下楼梯"
     },
-    "settingMinion": {
+    "SettingMinion": {
       "JP": "ミニオン",
       "EN": "Minion",
       "CN": "仆从"
     },
-    "settingPet": {
+    "SettingPet": {
       "JP": "仲間",
       "EN": "Ally",
       "CN": "伙伴"
     },
-    "settingSpecialCharacter": {
+    "SettingSpecialCharacter": {
       "JP": "特別なNPC",
       "EN": "Special NPC",
       "CN": "特殊NPC"
     },
-    "settingSpecialCharacterBoss": {
+    "SettingSpecialCharacterBoss": {
       "JP": "ボス",
       "EN": "Boss",
       "CN": "首领"
     },
-    "settingSpecialCharacterEvolved": {
+    "SettingSpecialCharacterEvolved": {
       "JP": "進化個体",
       "EN": "Evolved",
       "CN": "进化个体"
     },
-    "settingSpecialThing": {
+    "SettingSpecialThing": {
       "JP": "特別なアイテム",
       "EN": "Special Item",
       "CN": "特殊物品"
     },
-    "settingCustom": {
+    "SettingCustom": {
       "JP": "カスタム",
       "EN": "Custom",
       "CN": "自定义"
     },
-    "settingCustomCharacter": {
+    "SettingCustomCharacter": {
       "JP": "NPC",
       "EN": "NPC",
       "CN": "NPC"
     },
-    "settingCustomThing": {
+    "SettingCustomThing": {
       "JP": "アイテム",
       "EN": "Item",
       "CN": "物品"
     },
-    "settingCustomDialogDetail": {
+    "SettingCustomDialogDetail": {
       "JP": "名前(もしくはID)をカンマ区切りで入力する。\r\n通常入力した文言は部分一致で大文字小文字を区別する。\r\n正規表現を使用する場合は /パターン/ の形で入力する。\r\n正規表現オプションは次の通り i:大文字小文字を無視 x:パターン内の空白を無視",
       "EN": "Enter names (or IDs) separated by commas.\r\nNormal input uses partial matching and is case-sensitive.\r\nTo use regular expressions, enter in the form /pattern/.\r\nRegular expression options are as follows: i: ignore case, x: ignore whitespace in pattern",
       "CN": "用逗号分隔输入名称（或ID）。\r\n通常输入按“部分匹配”处理，并区分大小写。\r\n使用正则表达式时，请按 /模式/ 的形式输入。\r\n正则表达式选项如下：i：忽略大小写，x：忽略模式中的空白"
     },
-    "settingMapRefresh": {
+    "SettingMapRefresh": {
       "JP": "マップ更新",
       "EN": "Map Refresh",
       "CN": "地图刷新"
     },
-    "settingPointerOver": {
+    "SettingPointerOver": {
       "JP": "マウスオーバー",
       "EN": "Pointer Over",
       "CN": "鼠标悬停"
     },
-    "settingPointerOverMaxShownPerGroup": {
+    "SettingPointerOverMaxShownPerGroup": {
       "JP": "グループごとの最大表示数",
       "EN": "Max Shown Per Group",
       "CN": "每组最大显示数"
     },
-    "settingOthers": {
+    "SettingOthers": {
       "JP": "その他",
       "EN": "Others",
       "CN": "其他"
     },
-    "settingOthersIsForegroundPlayer": {
+    "SettingOthersIsForegroundPlayer": {
       "JP": "PCを最前面に表示",
       "EN": "Show PC in Foreground",
       "CN": "将PC显示在最前面"
     },
-    "settingOthersAllowMoveWhenUnseen": {
+    "SettingOthersAllowMoveWhenUnseen": {
       "JP": "クリック時に強制移動",
       "EN": "Force Move on Click",
       "CN": "点击时强制移动"
     },
-    "settingOthersReset": {
+    "SettingOthersReset": {
       "JP": "リセット",
       "EN": "Reset",
       "CN": "重置"
     },
-    "settingOthersResetExecute": {
+    "SettingOthersResetExecute": {
       "JP": "実行",
       "EN": "Execute",
       "CN": "执行"
     }
   },
   "format": {
-    "hiddenByLimit": {
+    "HiddenByLimit": {
       "JP": "表示上限によりいくつかの項目は非表示 (${COUNT})",
       "EN": "Some items are hidden due to display limit (${COUNT})",
       "CN": "由于显示上限，部分项目已被隐藏 (${COUNT})",
@@ -189,7 +189,7 @@
         }
       }
     },
-    "settingMapRefreshIntervalDisplay": {
+    "SettingMapRefreshIntervalDisplay": {
       "JP": "${SECONDS} 秒",
       "EN": "${SECONDS} seconds",
       "CN": "${SECONDS} 秒",
@@ -200,7 +200,7 @@
         }
       }
     },
-    "settingMapRefreshInterval": {
+    "SettingMapRefreshInterval": {
       "JP": "更新間隔 - ${BREAKPOINT}",
       "EN": "Refresh Interval - ${BREAKPOINT}",
       "CN": "刷新间隔 - ${BREAKPOINT}",
@@ -210,7 +210,7 @@
         }
       }
     },
-    "settingPointerOverAroundCount": {
+    "SettingPointerOverAroundCount": {
       "JP": "周辺マス数 - ${BREAKPOINT}",
       "EN": "Surrounding Tiles - ${BREAKPOINT}",
       "CN": "周边格子数 - ${BREAKPOINT}",
@@ -220,7 +220,7 @@
         }
       }
     },
-    "customSettingError": {
+    "CustomSettingError": {
       "JP": "${CONFIG_ITEM_GROUP} の設定項目 ${CONFIG_ITEM_NAME} でエラーがあります: ${ERROR_VALUES}",
       "EN": "Error in ${CONFIG_ITEM_GROUP} configuration item ${CONFIG_ITEM_NAME}: ${ERROR_VALUES}",
       "CN": "${CONFIG_ITEM_GROUP} 的配置项 ${CONFIG_ITEM_NAME} 存在错误: ${ERROR_VALUES}",
@@ -236,7 +236,7 @@
         }
       }
     },
-    "settingCustomEdit": {
+    "SettingCustomEdit": {
       "JP": "編集(${VALUE})",
       "EN": "Edit (${VALUE})",
       "CN": "编辑(${VALUE})",
