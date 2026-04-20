@@ -230,6 +230,13 @@ namespace Elin.Plugin.Generator.Test
     {
         #region function
 
+        [Fact]
+        public void NodeNameTest()
+        {
+            var test = new XmlDocumentText("", new XmlDocumentCommentBuilder(new SourceBuilder()));
+            Assert.Equal("#text", test.NodeName);
+        }
+
         [Theory]
         [InlineData("", "")]
         [InlineData("abc", "abc")]
@@ -249,6 +256,13 @@ namespace Elin.Plugin.Generator.Test
     public class XmlDocumentCommentTest
     {
         #region function
+
+        [Fact]
+        public void NodeNameTest()
+        {
+            var test = new XmlDocumentComment("");
+            Assert.Equal("#comment", test.NodeName);
+        }
 
         [Theory]
         [InlineData("<!--  -->", "")]
@@ -270,6 +284,13 @@ namespace Elin.Plugin.Generator.Test
     public class XmlDocumentFragmentTest
     {
         #region function
+
+        [Fact]
+        public void NodeNameTest()
+        {
+            var test = new XmlDocumentFragment([]);
+            Assert.Equal("#fragment", test.NodeName);
+        }
 
         public static TheoryData<string, IXmlDocumentNode[]> ToXmlStringData => new()
         {
@@ -303,6 +324,13 @@ namespace Elin.Plugin.Generator.Test
     public class XmlDocumentCDataTest
     {
         #region function
+
+        [Fact]
+        public void NodeNameTest()
+        {
+            var test = new XmlDocumentCData("");
+            Assert.Equal("#cdata-section", test.NodeName);
+        }
 
         [Theory]
         [InlineData("<![CDATA[]]>", "")]
