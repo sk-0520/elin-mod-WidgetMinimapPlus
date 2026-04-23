@@ -15,9 +15,9 @@ namespace Elin.Plugin.Main.Models.Impl
                 // プラグイン読み込み時にはまだ設定のビルドを行っていないため、プロファイル開始時のこのタイミングで実施
                 setting.Build(true);
 
-                ModHelper.LogDev(ModHelper.ToStringFromInformation());
                 ModHelper.DoDev(() =>
                 {
+                    ModHelper.WriteDev(ModHelper.GetInformationString());
                     var json = JsonConvert.SerializeObject(setting, Formatting.Indented);
                     ModHelper.WriteDev(json);
                 });
