@@ -1,6 +1,5 @@
 using Elin.Plugin.Main.Models.Settings;
 using Elin.Plugin.Main.PluginHelpers;
-using HarmonyLib;
 
 // Mod 用テンプレート組み込み想定
 
@@ -19,8 +18,7 @@ namespace Elin.Plugin.Main
         /// <summary>
         /// 起動時のプラグイン独自処理。
         /// </summary>
-        /// <param name="harmony"></param>
-        private void AwakePlugin(Harmony harmony)
+        private void AwakePlugin()
         {
             var setting = LoadConfig();
             Setting.Instance = setting;
