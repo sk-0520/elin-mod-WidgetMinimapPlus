@@ -26,6 +26,18 @@ namespace Elin.Plugin.Main
         }
 
         /// <summary>
+        /// 初期化時のプラグイン独自処理。
+        /// </summary>
+        /// <remarks>
+        /// <para>通常の初期化は基本的に <see cref="AwakePlugin"/> で行う想定。</para>
+        /// <para>ModHelp 用に <see cref="Start"/> を生やしたので本メソッドが追加されただけ。</para>
+        /// </remarks>
+        private void StartPlugin()
+        {
+            //NOP
+        }
+
+        /// <summary>
         /// 終了時のプラグイン独自処理。
         /// </summary>
         private void OnDestroyPlugin()

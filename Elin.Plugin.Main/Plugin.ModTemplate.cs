@@ -49,6 +49,11 @@ namespace Elin.Plugin.Main
             }
         }
 
+        public void Start()
+        {
+            StartPlugin();
+        }
+
         public void OnDestroy()
         {
             OnDestroyPlugin();
