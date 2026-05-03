@@ -8,6 +8,9 @@ namespace Elin.Plugin.Main.PluginHelpers
     {
         #region define
 
+        /// <summary>
+        /// 各種連携 Mod の ID。
+        /// </summary>
         public static class ModId
         {
             #region define
@@ -45,6 +48,18 @@ namespace Elin.Plugin.Main.PluginHelpers
             return FilterPlugins(ModManager.ListPluginObject)
                 .First(a => a.Info.Metadata.GUID == pluginId)
             ;
+        }
+
+        #endregion
+    }
+
+    public static class CollaborationHelperExtensions
+    {
+        #region function
+
+        public static BaseUnityPlugin? FindModOptions(this CollaborationHelper collaborate)
+        {
+            return collaborate.FindPluginOrDefault(CollaborationHelper.ModId.ModOptions);
         }
 
         #endregion
