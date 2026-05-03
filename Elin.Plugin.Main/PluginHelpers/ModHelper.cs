@@ -70,6 +70,11 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// </summary>
         internal static CommonHelper Common { get; } = new CommonHelper();
 
+        /// <summary>
+        /// 自分以外の Mod 連携処理。
+        /// </summary>
+        internal static CollaborationHelper Collaborate { get; } = new CollaborationHelper();
+
         #endregion
 
         #region function
