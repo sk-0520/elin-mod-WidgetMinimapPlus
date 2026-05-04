@@ -1,5 +1,6 @@
 using Elin.Plugin.Main.Models.Settings;
 using Elin.Plugin.Main.PluginHelpers;
+using Elin.Plugin.Main.PluginHelpers.Mods;
 
 // Mod 用テンプレート組み込み想定
 
@@ -57,9 +58,9 @@ namespace Elin.Plugin.Main
 
         #region TemplatePluginBase
 
-        protected override string LoadModOptionsPreBuildXml()
+        protected override void BuildModOptions(ModOptions modOptions)
         {
-            return //lang=xml
+            var xml = //lang=xml
 """
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ConfigLayoutSchema.xsd">
@@ -136,6 +137,9 @@ namespace Elin.Plugin.Main
 </config>
 """
             ;
+
+            var controller = modOptions.Register();
+            controller.SetPreBuildXml(xml);
         }
 
         #endregion

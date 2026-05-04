@@ -1,7 +1,7 @@
 using BepInEx;
 using Elin.Plugin.Generated;
 using Elin.Plugin.Main.PluginHelpers;
-using EvilMask.Elin.ModOptions;
+using Elin.Plugin.Main.PluginHelpers.Mods;
 using HarmonyLib;
 using System;
 using System.Threading;
@@ -14,16 +14,8 @@ namespace Elin.Plugin.Main
     {
         #region function
 
-        protected virtual string LoadModOptionsPreBuildXml()
-        {
-            return string.Empty;
-        }
-
-        protected virtual void RegisterModOptionsPreBuildXml(string xml)
-        {
-            var controller = ModOptionController.Register($"{Package.Title}({Package.Id})");
-            controller.SetPreBuildWithXml(xml);
-        }
+        protected virtual void BuildModOptions(ModOptions modOptions)
+        { }
 
         #endregion
     }
@@ -89,19 +81,14 @@ namespace Elin.Plugin.Main
 
         private void RegisterModOptions()
         {
-            var modOptions = ModHelper.Collaborate.FindModOptions();
-            if (modOptions is null)
+            var modOptionsPlugin = ModHelper.Collaborate.FindModOptions();
+            if (modOptionsPlugin is null)
             {
                 return;
             }
 
-            var xml = LoadModOptionsPreBuildXml();
-            if (string.IsNullOrEmpty(xml))
-            {
-                return;
-            }
-
-            RegisterModOptionsPreBuildXml(xml);
+            var modOptions = new ModOptions(modOptionsPlugin);
+            BuildModOptions(modOptions);
         }
 
         #endregion
