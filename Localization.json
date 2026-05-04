@@ -248,5 +248,10 @@
     }
   },
   "config": {
+    "SettingAllowMoveWhenUnseen": {
+      "JP": "未確認の対象をクリックしたとき、確認できる場所まで強制的に移動する",
+      "EN": "When clicking on an unseen target, force move to a location where it can be seen",
+      "CN": "点击未确认的目标时，强制移动到可以看到它的位置"
+    }
   }
 }

@@ -148,6 +148,7 @@ namespace Elin.Plugin.Main.Models.Settings
         /// <summary>
         /// まだ見ていなくてもキャラクターを移動可能にするか。
         /// </summary>
+        [GeneratePluginConfigDescription("SettingAllowMoveWhenUnseen")]
         public virtual bool AllowMoveWhenUnseen { get; set; } = false;
 
         #endregion

@@ -134,12 +134,16 @@ namespace Elin.Plugin.Main
     <input>
         <placeholderID>input.placeholder</placeholderID>
     </input>
+
+    <text id="Setting.SettingAllowMoveWhenUnseen">exampleText</text>
+
 </config>
 """
             ;
 
             var controller = modOptions.Register();
             controller.SetPreBuildXml(xml);
+            controller.ApplyTranslations<Setting>("JP", ModHelper.Lang);
         }
 
         #endregion

@@ -675,15 +675,20 @@ namespace Elin.Plugin.Generator
                 {
                     public {{GeneratorConstants.GeneratePluginConfigDescriptionAttributeName}}(string propertyName, PluginConfigDescriptionTarget target)
                     {
-                        //NOP
+                        PropertyName = propertyName;
+                        Target = target;
                     }
 
                     public {{GeneratorConstants.GeneratePluginConfigDescriptionAttributeName}}(string configName)
+                        : this(configName, PluginConfigDescriptionTarget.Config)
                     {
                         //NOP
                     }
 
                     #region property
+
+                    public string PropertyName { get; }
+                    public PluginConfigDescriptionTarget Target { get; }
 
                     /// <summary>
                     /// 全部の言語を出力対象にする。
