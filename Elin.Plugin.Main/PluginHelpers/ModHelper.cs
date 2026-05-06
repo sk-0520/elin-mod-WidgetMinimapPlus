@@ -60,6 +60,8 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// <remarks>言語定義は Localization.json を編集することで自動的に適用されます。</remarks>
         internal static PluginLocalization Lang { get; } = new PluginLocalization();
 
+        internal static AssetHelper Asset { get; private set; } = default!;
+
         /// <summary>
         /// Elin ヘルパー。
         /// </summary>
@@ -103,6 +105,7 @@ namespace Elin.Plugin.Main.PluginHelpers
             Logger = logger;
             Context = context;
             Message = new MessageHelper(context);
+            Asset = new AssetHelper(Path.GetDirectoryName(plugin.GetType().Assembly.Location));
 
 #if DEBUG
             FileLogger = new FileLogger(Mod.LogFile);

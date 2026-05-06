@@ -41,13 +41,13 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             }
         }
 
-        private Action<string, string, string> SetTranslationMethod
+        private Action<string, string, string> SetTranslationArgsStringStringStringMethod
         {
             get
             {
                 if (field is null)
                 {
-                    var methodInfo = AccessTools.Method(RawType, "SetTranslation");
+                    var methodInfo = AccessTools.Method(RawType, "SetTranslation", new[] { typeof(string), typeof(string), typeof(string) });
 
                     var instanceExpr = Expression.Constant(Raw);
                     var argExprs = (
@@ -76,7 +76,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
 
         public void SetTranslation(string langCode, string id, string trans)
         {
-            SetTranslationMethod(langCode, id, trans);
+            SetTranslationArgsStringStringStringMethod(langCode, id, trans);
         }
 
         private void ApplyTranslations(string sectionName, PropertyInfo propertyInfo, string langCode, PluginLocalization localization, HashSet<string> setIds)
@@ -99,6 +99,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             }
             else
             {
+                // 定義から翻訳文言を設定
                 var propertyName = generatePluginConfigDescriptionAttribute.PropertyName;
                 var localizationItem = generatePluginConfigDescriptionAttribute.Target switch
                 {
@@ -107,17 +108,20 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
                     _ => throw new NotImplementedException(),
                 };
 
-                if (setIds.Contains(propertyId))
+                var langValue = localizationItem.GetText(langCode, this);
+                if (!setIds.Contains(propertyId))
                 {
-                    ModHelper.LogDev((langCode, propertyId, localizationItem.GetText(this)));
-                    SetTranslation(langCode, propertyId, localizationItem.GetText(this));
+                    ModHelper.LogDev(("set", langCode, propertyId, langValue));
+                    SetTranslation(langCode, propertyId, langValue);
                     setIds.Add(propertyId);
                 }
                 else
                 {
-                    ModHelper.LogDev((langCode, propertyId, localizationItem.GetText(this)));
+                    ModHelper.LogDev(("not", langCode, propertyId, langValue));
                 }
             }
+
+            // 未設定のIDから翻訳文言の割り当て
         }
 
         // 現状の SG では無理。実行時に構築する
@@ -128,6 +132,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             var sectionName = configType.Name;
             var setIds = new HashSet<string>();
 
+            SetTranslation(langCode, Package.Id, Package.Title);
             var properties = configType.GetProperties();
             foreach (var property in properties)
             {
@@ -189,12 +194,12 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
 
         public static ModOptionsController Register(this ModOptions modOptions, string guid)
         {
-            return modOptions.Register($"{Package.Title}({Package.Id})", guid);
+            return modOptions.Register(guid, null);
         }
 
         public static ModOptionsController Register(this ModOptions modOptions)
         {
-            return modOptions.Register($"{Package.Title}({Package.Id})", null!);
+            return modOptions.Register(Package.Id, null);
         }
 
         #endregion
