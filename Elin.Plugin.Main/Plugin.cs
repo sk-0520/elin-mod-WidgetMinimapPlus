@@ -1,6 +1,7 @@
 using Elin.Plugin.Main.Models.Settings;
 using Elin.Plugin.Main.PluginHelpers;
 using Elin.Plugin.Main.PluginHelpers.Mods;
+using System.IO;
 
 // Mod 用テンプレート組み込み想定
 
@@ -60,16 +61,12 @@ namespace Elin.Plugin.Main
 
         protected override void BuildModOptions(ModOptions modOptions)
         {
-            //ModHelper.Asset.GetPath()
-            var xml = "";
+            var xml = File.ReadAllText(ModHelper.Asset.Combine("config.xml"));
 
             var controller = modOptions.Register();
             controller.SetPreBuildXml(xml);
             controller.ApplyTranslations<Setting>("JP", ModHelper.Lang);
             controller.SetTranslation("JP", "input.placeholder", "abc");
-
-            controller.SetTranslation("JP", "exampleText",
-    "This text only has an English version!");
         }
 
         #endregion
