@@ -2,13 +2,17 @@
 <config
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/EvilMask/Elin.ModOptions/refs/heads/main/doc/ConfigLayoutSchema.xsd"
-	xmlns:ptc="../../dev-items/PluginTemplateConfigSchema.xsd"
 >
-	<vlayout>
-		<topic ptc:config="SettingStairs"></topic>
-		
+	<vlayout border="true">
+		<title>LabelStairs</title>
+		<toggle id="Setting.Stairs.IsEnabled">
+			<contentId>StairsIsEnabled</contentId>
+		</toggle>
+		<toggle id="Setting.Stairs.ShowEvenIfUnseen">
+			<contentId>StairsShowEvenIfUnseen</contentId>
+		</toggle>
 	</vlayout>
-	
+
 	<hlayout>
 		<vlayout border="true">
 			<slider>MySlider</slider>

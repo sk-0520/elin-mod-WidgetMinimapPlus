@@ -1,4 +1,5 @@
-﻿using Elin.Plugin.Main.Converters;
+using Elin.Plugin.Generated;
+using Elin.Plugin.Main.Converters;
 using Newtonsoft.Json;
 
 namespace Elin.Plugin.Main.Models.Settings
@@ -13,11 +14,13 @@ namespace Elin.Plugin.Main.Models.Settings
         /// <summary>
         /// 有効。
         /// </summary>
+        [GeneratePluginConfigDescription("StairsIsEnabled")]
         public virtual bool IsEnabled { get; set; }
 
         /// <summary>
         /// まだ見ていなくても表示するか。
         /// </summary>
+        [GeneratePluginConfigDescription("StairsShowEvenIfUnseen")]
         public virtual bool ShowEvenIfUnseen { get; set; }
 
         /// <summary>

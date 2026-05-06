@@ -250,7 +250,18 @@
   "config": {
     "LabelStairs": {
       "JP": "階段",
-      "EN": "Stairs"
+      "EN": "Stairs",
+      "CN": "楼梯"
+    },
+    "StairsIsEnabled": {
+      "JP": "有効",
+      "EN": "Enabled",
+      "CN": "启用"
+    },
+    "StairsShowEvenIfUnseen": {
+      "JP": "未確認でも表示",
+      "EN": "Show Even If Unseen",
+      "CN": "即使未确认也显示"
     },
 
     "SettingAllowMoveWhenUnseen": {

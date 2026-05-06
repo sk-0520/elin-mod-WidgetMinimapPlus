@@ -3,6 +3,7 @@ using Elin.Plugin.Generated;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Xml;
@@ -15,16 +16,16 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
 
         private struct Id
         {
-            public Id(string config, string property)
+            public Id(string config, string option)
             {
                 Config = config;
-                Property = property;
+                Option = option;
             }
 
             #region property
 
             public string Config { get; }
-            public string Property { get; }
+            public string Option { get; }
 
             #endregion
         }
@@ -103,12 +104,11 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
         private Id ToId(string sectionName, PropertyInfo propertyInfo)
         {
             var configId = $"{sectionName}.{propertyInfo.Name}";
-            var propertyId = $"{sectionName}{propertyInfo.Name}";
+            var optionId = $"{sectionName}{propertyInfo.Name}";
 
-            return new Id(configId, propertyId);
+            return new Id(configId, optionId);
         }
 
-        [Obsolete]
         private void ApplyTranslations(string sectionName, PropertyInfo propertyInfo, string langCode, PluginLocalization localization, HashSet<string> setIds)
         {
             var generatePluginConfigDescriptionAttribute = propertyInfo.GetCustomAttribute<GeneratePluginConfigDescriptionAttribute>();
@@ -138,21 +138,20 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
                 };
 
                 var langValue = localizationItem.GetText(langCode, this);
-                if (!setIds.Contains(id.Property))
+                if (!setIds.Contains(id.Option))
                 {
-                    ModHelper.LogDev(("set", langCode, id.Property, langValue));
-                    SetTranslation(langCode, id.Property, langValue);
-                    setIds.Add(id.Property);
+                    ModHelper.LogDev(("set", langCode, id.Option, langValue));
+                    SetTranslation(langCode, id.Option, langValue);
+                    setIds.Add(id.Option);
                 }
                 else
                 {
-                    ModHelper.LogDev(("not", langCode, id.Property, langValue));
+                    ModHelper.LogDev(("not", langCode, id.Option, langValue));
                 }
             }
         }
 
         // 現状の SG では無理。実行時に構築する
-        [Obsolete]
         internal void ApplyTranslations<TConfig>(string langCode, PluginLocalization localization)
             where TConfig : class
         {
@@ -167,12 +166,16 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
                 ApplyTranslations(sectionName, property, langCode, localization, setIds);
             }
 
-            // 未設定のIDから翻訳文言の割り当て
-            // できないんだわ
-            // XML パース時に処理しないと厳しい気がしてきたぞ
+            // むりやりの流し込みで何とかしてみる
+            foreach (var pair in localization.Config.Items.Where(a => !setIds.Contains(a.Key)))
+            {
+                var langValue = pair.Value.GetText(langCode, this);
+                SetTranslation(langCode, pair.Key, langValue);
+            }
         }
 
         // ここで全部やる！ これ以外の構築は一旦考慮しない！
+        [Obsolete]
         internal void ApplyPreBuildXml<TConfig>(string xml, string langCode, PluginLocalization localization)
         {
             XmlDocument xmlDoc = new();

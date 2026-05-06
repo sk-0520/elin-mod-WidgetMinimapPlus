@@ -64,10 +64,10 @@ namespace Elin.Plugin.Main
             var xml = File.ReadAllText(ModHelper.Asset.Combine("config.xml"));
 
             var controller = modOptions.Register();
-            //controller.SetPreBuildXml(xml);
-            //controller.ApplyTranslations<Setting>("JP", ModHelper.Lang);
+            controller.SetPreBuildXml(xml);
+            controller.ApplyTranslations<Setting>("JP", ModHelper.Lang);
             //controller.SetTranslation("JP", "input.placeholder", "abc");
-            controller.ApplyPreBuildXml<Setting>(xml, "JP", ModHelper.Lang);
+            //controller.ApplyPreBuildXml<Setting>(xml, "JP", ModHelper.Lang);
         }
 
         #endregion
