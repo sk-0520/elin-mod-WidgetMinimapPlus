@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Xml;
 
 namespace Elin.Plugin.Main.PluginHelpers.Mods
 {
@@ -107,6 +108,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             return new Id(configId, propertyId);
         }
 
+        [Obsolete]
         private void ApplyTranslations(string sectionName, PropertyInfo propertyInfo, string langCode, PluginLocalization localization, HashSet<string> setIds)
         {
             var generatePluginConfigDescriptionAttribute = propertyInfo.GetCustomAttribute<GeneratePluginConfigDescriptionAttribute>();
@@ -150,6 +152,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
         }
 
         // 現状の SG では無理。実行時に構築する
+        [Obsolete]
         internal void ApplyTranslations<TConfig>(string langCode, PluginLocalization localization)
             where TConfig : class
         {
@@ -168,6 +171,17 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             // できないんだわ
             // XML パース時に処理しないと厳しい気がしてきたぞ
         }
+
+        // ここで全部やる！ これ以外の構築は一旦考慮しない！
+        internal void ApplyPreBuildXml<TConfig>(string xml, string langCode, PluginLocalization localization)
+        {
+            XmlDocument xmlDoc = new();
+            xmlDoc.LoadXml(xml);
+
+            var root = xmlDoc.DocumentElement;
+            ModHelper.LogDev(root);
+        }
+
 
         #endregion
 
