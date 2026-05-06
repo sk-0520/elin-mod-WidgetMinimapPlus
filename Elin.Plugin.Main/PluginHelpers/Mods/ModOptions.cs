@@ -10,6 +10,26 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
 {
     public class ModOptionsController : ILanguageSystem
     {
+        #region define
+
+        private struct Id
+        {
+            public Id(string config, string property)
+            {
+                Config = config;
+                Property = property;
+            }
+
+            #region property
+
+            public string Config { get; }
+            public string Property { get; }
+
+            #endregion
+        }
+
+        #endregion
+
         public ModOptionsController(object rawController)
         {
             Raw = rawController;
@@ -79,11 +99,18 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             SetTranslationArgsStringStringStringMethod(langCode, id, trans);
         }
 
+        private Id ToId(string sectionName, PropertyInfo propertyInfo)
+        {
+            var configId = $"{sectionName}.{propertyInfo.Name}";
+            var propertyId = $"{sectionName}{propertyInfo.Name}";
+
+            return new Id(configId, propertyId);
+        }
+
         private void ApplyTranslations(string sectionName, PropertyInfo propertyInfo, string langCode, PluginLocalization localization, HashSet<string> setIds)
         {
             var generatePluginConfigDescriptionAttribute = propertyInfo.GetCustomAttribute<GeneratePluginConfigDescriptionAttribute>();
-            var configId = $"{sectionName}.{propertyInfo.Name}";
-            var propertyId = $"{sectionName}{propertyInfo.Name}";
+            var id = ToId(sectionName, propertyInfo);
 
             // null ってる場合は子クラスか未設定
             if (generatePluginConfigDescriptionAttribute is null)
@@ -93,7 +120,7 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
                     var nestedPropertyInfos = propertyInfo.PropertyType.GetProperties();
                     foreach (var nestedPropertyInfo in nestedPropertyInfos)
                     {
-                        ApplyTranslations(configId, nestedPropertyInfo, langCode, localization, setIds);
+                        ApplyTranslations(id.Config, nestedPropertyInfo, langCode, localization, setIds);
                     }
                 }
             }
@@ -109,19 +136,17 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
                 };
 
                 var langValue = localizationItem.GetText(langCode, this);
-                if (!setIds.Contains(propertyId))
+                if (!setIds.Contains(id.Property))
                 {
-                    ModHelper.LogDev(("set", langCode, propertyId, langValue));
-                    SetTranslation(langCode, propertyId, langValue);
-                    setIds.Add(propertyId);
+                    ModHelper.LogDev(("set", langCode, id.Property, langValue));
+                    SetTranslation(langCode, id.Property, langValue);
+                    setIds.Add(id.Property);
                 }
                 else
                 {
-                    ModHelper.LogDev(("not", langCode, propertyId, langValue));
+                    ModHelper.LogDev(("not", langCode, id.Property, langValue));
                 }
             }
-
-            // 未設定のIDから翻訳文言の割り当て
         }
 
         // 現状の SG では無理。実行時に構築する
@@ -138,6 +163,10 @@ namespace Elin.Plugin.Main.PluginHelpers.Mods
             {
                 ApplyTranslations(sectionName, property, langCode, localization, setIds);
             }
+
+            // 未設定のIDから翻訳文言の割り当て
+            // できないんだわ
+            // XML パース時に処理しないと厳しい気がしてきたぞ
         }
 
         #endregion

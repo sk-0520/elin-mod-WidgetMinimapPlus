@@ -3,6 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/EvilMask/Elin.ModOptions/refs/heads/main/doc/ConfigLayoutSchema.xsd"
 >
+	<vlayout>
+		<topic>SettingStairs</topic>
+		
+	</vlayout>
+	
 	<hlayout>
 		<vlayout border="true">
 			<slider>MySlider</slider>
