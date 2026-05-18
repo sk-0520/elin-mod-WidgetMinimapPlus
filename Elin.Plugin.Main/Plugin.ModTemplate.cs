@@ -1,6 +1,7 @@
 using BepInEx;
 using Elin.Plugin.Generated;
 using Elin.Plugin.Main.PluginHelpers;
+using Elin.Plugin.Main.PluginHelpers.Mods;
 using HarmonyLib;
 using System;
 using System.Threading;
@@ -9,8 +10,31 @@ using System.Threading;
 
 namespace Elin.Plugin.Main
 {
+    public abstract class TemplatePluginBase : BaseUnityPlugin
+    {
+        #region function
+
+        [Obsolete("未完成")]
+        protected virtual void BuildModOptions(ModOptions modOptions)
+        { }
+
+        protected virtual void PrePHLPlugin(int reloadCount, string assemblyPath)
+        { }
+
+        protected virtual void AwakePlugin()
+        { }
+
+        protected virtual void StartPlugin()
+        { }
+
+        protected virtual void OnDestroyPlugin()
+        { }
+
+        #endregion
+    }
+
     [BepInPlugin(Package.Id, Mod.Name, Mod.Version)]
-    public partial class Plugin : BaseUnityPlugin
+    public partial class Plugin : TemplatePluginBase
     {
         #region property
 
@@ -49,6 +73,13 @@ namespace Elin.Plugin.Main
             }
         }
 
+        public void Start()
+        {
+            StartPlugin();
+
+            RegisterModOptions();
+        }
+
         public void OnDestroy()
         {
             OnDestroyPlugin();
@@ -61,6 +92,30 @@ namespace Elin.Plugin.Main
             ModHelper.Destroy();
         }
 
+        private void RegisterModOptions()
+        {
+            // アセンブリ参照なしで作るのしんどい
+#if false
+            var modOptionsPlugin = ModHelper.Collaborate.FindModOptions();
+            if (modOptionsPlugin is null)
+            {
+                return;
+            }
+
+            var modOptions = new ModOptions(modOptionsPlugin);
+            BuildModOptions(modOptions);
+#endif
+        }
+
+#if DEBUG
+        private void PRE_PHL(int reloadCount, string assemblyPath)
+        {
+            Logger.LogInfo($"PrePHL: {assemblyPath}");
+            ModHelper.PrePHLAssemblyPath = assemblyPath;
+            ModHelper.PHLReloadId = $"{reloadCount}_{DateTime.Now:HH:mm:ss}";
+            PrePHLPlugin(reloadCount, assemblyPath);
+        }
+#endif
         #endregion
     }
 }

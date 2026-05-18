@@ -256,6 +256,20 @@ namespace Elin.Plugin.Generator
                         return data;
                     }
 
+                    public string GetText(string prioritizeLangCode, ILanguageSystem languageSystem)
+                    {
+                        var data = prioritizeLangCode switch {
+                            {{sourceBuilder.JoinLines(templateLocalizationItem.OptionalLanguages.Select(a => $"\"{a.Key}\" => {a.Key},"))}}
+                            _ => null
+                        };
+                
+                        if(!string.IsNullOrEmpty(data)) {
+                            return data!;
+                        }
+
+                        return GetText(languageSystem);
+                    }
+                
                     public IEnumerable<KeyValuePair<string, string>> GetLanguages()
                     {
                         return new [] {

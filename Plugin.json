@@ -5,7 +5,7 @@
     "id": "sk.widgetminimapplus",
     "author": "sk",
     "loadPriority": 100,
-    "elinVersion": "0.23.295",
+    "elinVersion": "0.23.307",
     "description": [
       "[JP] ミニマップを少し便利にします。",
       "[EN] A mod that makes the minimap a little more useful.",
@@ -28,7 +28,7 @@
     ]
   },
   "mod": {
-    "version": "1.0.5",
+    "version": "1.0.6",
     "useDebugId": true,
     "log": "NUL"
   }

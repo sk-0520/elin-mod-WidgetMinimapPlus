@@ -85,6 +85,7 @@ namespace Elin.Plugin.Generator.Test
             // ソースジェネレータが生やしたメソッドの確認
             Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Bind" && a.Modifiers.Any(SyntaxKind.StaticKeyword));
             Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Reset" && !a.Modifiers.Any(SyntaxKind.StaticKeyword));
+            Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Clone" && !a.Modifiers.Any(SyntaxKind.StaticKeyword));
         }
 
         #endregion

@@ -83,6 +83,85 @@ namespace Elin.Plugin.Generator.Test.Use
             Assert.Equal(789, configBound.Value);
         }
 
+        [Fact]
+        public void SimpleCloneTest()
+        {
+            var configInstance = new SimpleConfig()
+            {
+                Value = 123,
+            };
+
+            var clonedConfig = configInstance.Clone();
+            Assert.IsType<SimpleConfig>(clonedConfig);
+
+            // 値は同じでインスタンスは違う
+            Assert.Equal(clonedConfig.Value, configInstance.Value);
+            Assert.NotSame(clonedConfig, configInstance);
+
+            // クローンした後に元の値を変えてもクローンした方には影響しない
+            configInstance.Value = 456;
+            Assert.Equal(123, clonedConfig.Value);
+        }
+
+        [Fact]
+        public void SimpleBindCloneTest()
+        {
+            var configInstance = new SimpleConfig()
+            {
+                Value = 123,
+            };
+            var configBound = SimpleConfig.Bind(new BepInEx.Configuration.ConfigFile("NUL", false), configInstance);
+
+            var clonedConfig = configBound.Clone();
+            // プロキシをクローンしても元のクラスのインスタンスが返ってくる
+            Assert.IsType<SimpleConfig>(clonedConfig);
+
+            // 値は同じでインスタンスは違う
+            Assert.Equal(clonedConfig.Value, configBound.Value);
+            Assert.NotSame(clonedConfig, configBound);
+
+            // クローンした後に元の値を変えてもクローンした方には影響しない
+            configBound.Value = 456;
+            Assert.Equal(123, clonedConfig.Value);
+        }
+
+        [Fact]
+        public void NestCloneTest()
+        {
+            var configInstance = new NestConfig()
+            {
+                ChildA = new ChildConfig()
+                {
+                    Data = 123,
+                },
+                ChildB = new ChildConfig()
+                {
+                    Data = 456,
+                },
+                Value = 789,
+            };
+            var configBound = NestConfig.Bind(new BepInEx.Configuration.ConfigFile("NUL", false), configInstance);
+
+            var clonedConfigInstance = configInstance.Clone();
+            var clonedConfigBound = configBound.Clone();
+
+            Assert.IsType<NestConfig>(clonedConfigInstance);
+            Assert.IsType<NestConfig>(clonedConfigBound);
+
+            // 値は同じでインスタンスは違う
+            Assert.Equal(clonedConfigInstance.Value, configInstance.Value);
+            Assert.NotSame(clonedConfigInstance, configInstance);
+
+            Assert.Equal(clonedConfigBound.Value, configBound.Value);
+            Assert.NotSame(clonedConfigBound, configBound);
+
+            Assert.Equal(clonedConfigInstance.ChildA.Data, configInstance.ChildA.Data);
+            Assert.NotSame(clonedConfigInstance.ChildA, configInstance.ChildA);
+
+            Assert.Equal(clonedConfigInstance.ChildB.Data, configInstance.ChildB.Data);
+            Assert.NotSame(clonedConfigInstance.ChildB, configInstance.ChildB);
+        }
+
         #endregion
     }
 }

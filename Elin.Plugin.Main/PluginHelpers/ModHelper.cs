@@ -52,6 +52,15 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// </summary>
         /// <remarks>DEBUG 時のみ有効。</remarks>
         private static FileLogger FileLogger { get; set; } = default!;
+
+        /// <summary>
+        /// PluginHotLoader で渡されるアセンブリパス。
+        /// </summary>
+        internal static string PrePHLAssemblyPath { get; set; } = string.Empty;
+        /// <summary>
+        /// PluginHotLoader のリロード回数を識別するための ID。
+        /// </summary>
+        internal static string PHLReloadId { get; set; } = string.Empty;
 #endif
 
         /// <summary>
@@ -59,6 +68,8 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// </summary>
         /// <remarks>言語定義は Localization.json を編集することで自動的に適用されます。</remarks>
         internal static PluginLocalization Lang { get; } = new PluginLocalization();
+
+        internal static AssetHelper Asset { get; private set; } = default!;
 
         /// <summary>
         /// Elin ヘルパー。
@@ -70,9 +81,50 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// </summary>
         internal static CommonHelper Common { get; } = new CommonHelper();
 
+        /// <summary>
+        /// 自分以外の Mod 連携処理。
+        /// </summary>
+        [Obsolete("未完成")]
+        internal static CollaborationHelper Collaborate { get; } = new CollaborationHelper();
+
         #endregion
 
         #region function
+
+        /// <summary>
+        /// 現在のプラグインのIDを取得する。
+        /// </summary>
+        /// <returns>
+        /// <para>プラグインのID。</para>
+        /// <para>基本的に <see cref="Package.Id"/> を返すが、DEBUG 時で再読み込みが行われた場合は <see cref="PHLReloadId"/> を付加する。</para>
+        /// </returns>
+        public static string GetCurrentPluginId()
+        {
+            var pluginId = Package.Id;
+
+#if DEBUG
+            if (!string.IsNullOrEmpty(PHLReloadId))
+            {
+                pluginId += $"_{PHLReloadId}";
+            }
+#endif
+
+            return pluginId;
+        }
+
+        private static string GetAssemblyDirectoryPath(BaseUnityPlugin plugin)
+        {
+            var assemblyLocation = plugin.GetType().Assembly.Location;
+#if DEBUG
+            if (string.IsNullOrWhiteSpace(assemblyLocation))
+            {
+                assemblyLocation = PrePHLAssemblyPath;
+            }
+#endif
+            Logger.LogDebug($"AssemblyLocation: {assemblyLocation}");
+
+            return Path.GetDirectoryName(assemblyLocation);
+        }
 
         /// <summary>
         /// 初期化。
@@ -92,12 +144,13 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// }
         /// </code>
         /// </example>
-        public static void Initialize(BaseUnityPlugin plugin, ManualLogSource logger, SynchronizationContext context)
+        public static void Initialize(Plugin plugin, ManualLogSource logger, SynchronizationContext context)
         {
             Plugin = plugin;
             Logger = logger;
             Context = context;
             Message = new MessageHelper(context);
+            Asset = new AssetHelper(GetAssemblyDirectoryPath(plugin));
 
 #if DEBUG
             FileLogger = new FileLogger(Mod.LogFile);

@@ -14,7 +14,7 @@ namespace Elin.Plugin.Generator
     {
         #region function
 
-        private bool IsConfigTarget(ISymbol symbol)
+        private static bool IsConfigTarget(ISymbol symbol)
         {
             if (symbol.IsImplicitlyDeclared)
             {
@@ -40,7 +40,7 @@ namespace Elin.Plugin.Generator
             return true;
         }
 
-        private bool IsSupportedType(ITypeSymbol type)
+        private static bool IsSupportedType(ITypeSymbol type)
         {
             if (type.TypeKind == TypeKind.Array)
             {
@@ -87,7 +87,7 @@ namespace Elin.Plugin.Generator
             return false;
         }
 
-        private bool IsProxyTarget(IPropertySymbol symbol)
+        private static bool IsProxyTarget(IPropertySymbol symbol)
         {
             return symbol.IsVirtual
                 &&
@@ -111,12 +111,12 @@ namespace Elin.Plugin.Generator
             return conversion.IsImplicit;
         }
 
-        private string ToEntriesClassName(ISymbol targetSymbol)
+        private static string ToEntriesClassName(ISymbol targetSymbol)
         {
             return $"{targetSymbol.Name}ConfigEntries";
         }
 
-        private string ToProxyClassName(ISymbol targetSymbol)
+        private static string ToProxyClassName(ISymbol targetSymbol)
         {
             return $"{targetSymbol.Name}Proxy";
         }
@@ -126,7 +126,12 @@ namespace Elin.Plugin.Generator
             return $"Create{ToEntriesClassName(symbol)}";
         }
 
-        private string? GetAcceptableValue(SourceProductionContext context, Compilation compilation, SourceBuilder sourceBuilder, IPropertySymbol symbol)
+        private static string ToCloneMethodName(ISymbol symbol)
+        {
+            return $"Clone{symbol.Name}Core";
+        }
+
+        private static string? GetAcceptableValue(SourceProductionContext context, Compilation compilation, SourceBuilder sourceBuilder, IPropertySymbol symbol)
         {
             var attributes = symbol.GetAttributes();
 
@@ -444,9 +449,64 @@ namespace Elin.Plugin.Generator
             yield return source;
         }
 
+        private IEnumerable<string> GenerateCloneSources(SourceBuilder sourceBuilder, INamedTypeSymbol typeSymbol, HashSet<string> generatedTypeNames)
+        {
+            if (!generatedTypeNames.Add(typeSymbol.ToDisplayString()))
+            {
+                yield break;
+            }
+
+            var properties = GetProperties(typeSymbol).ToArray();
+            var nestedProperties = GetNestedProperties(properties).Cast<IPropertySymbol>().ToArray();
+
+            foreach (var nested in nestedProperties.Select(a => (INamedTypeSymbol)a.Type))
+            {
+                foreach (var nestedSource in GenerateCloneSources(sourceBuilder, nested, generatedTypeNames))
+                {
+                    yield return nestedSource;
+                }
+            }
+
+            var source = $$"""
+
+            private static {{typeSymbol.ToDisplayString()}} {{ToCloneMethodName(typeSymbol)}}({{typeSymbol.ToDisplayString()}} source)
+            {
+                if (source is null)
+                {
+                    throw new global::System.ArgumentNullException(nameof(source));
+                }
+
+                var result = new {{typeSymbol.ToDisplayString()}}();
+
+                {{sourceBuilder.JoinLines(
+                    properties.Select(a =>
+                    {
+                        if (IsProxyTarget(a) || a.Type.TypeKind == TypeKind.Struct || a.Type.SpecialType == SpecialType.System_String)
+                        {
+                            return $"result.{a.Name} = source.{a.Name};";
+                        }
+
+                        if (a.NullableAnnotation == NullableAnnotation.Annotated)
+                        {
+                            return $"result.{a.Name} = source.{a.Name} is null ? null : {ToCloneMethodName(a.Type)}(source.{a.Name});";
+                        }
+
+                        return $"result.{a.Name} = {ToCloneMethodName(a.Type)}(source.{a.Name});";
+                    })
+                )}}
+
+                return result;
+            }
+
+            """;
+
+            yield return source;
+        }
+
         private string GenerateBindSource(SourceProductionContext context, Compilation compilation, SourceBuilder sourceBuilder, INamedTypeSymbol targetSymbol)
         {
             var bindSources = GenerateBindSources(context, compilation, sourceBuilder, string.Empty, targetSymbol, null);
+            var cloneSources = GenerateCloneSources(sourceBuilder, targetSymbol, new HashSet<string>());
 
             var source = $$"""
             {{sourceBuilder.Header}}
@@ -484,6 +544,13 @@ namespace Elin.Plugin.Generator
                 {
                     throw new System.NotSupportedException("Reset is not supported: {{targetSymbol.Name}}");
                 }
+
+                public {{targetSymbol.Name}} Clone()
+                {
+                    return {{ToCloneMethodName(targetSymbol)}}(this);
+                }
+
+                {{sourceBuilder.JoinLines(cloneSources)}}
             }
 
             """;
@@ -675,15 +742,20 @@ namespace Elin.Plugin.Generator
                 {
                     public {{GeneratorConstants.GeneratePluginConfigDescriptionAttributeName}}(string propertyName, PluginConfigDescriptionTarget target)
                     {
-                        //NOP
+                        PropertyName = propertyName;
+                        Target = target;
                     }
 
                     public {{GeneratorConstants.GeneratePluginConfigDescriptionAttributeName}}(string configName)
+                        : this(configName, PluginConfigDescriptionTarget.Config)
                     {
                         //NOP
                     }
 
                     #region property
+
+                    public string PropertyName { get; }
+                    public PluginConfigDescriptionTarget Target { get; }
 
                     /// <summary>
                     /// 全部の言語を出力対象にする。
