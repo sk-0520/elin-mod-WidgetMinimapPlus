@@ -86,6 +86,63 @@ namespace Elin.Plugin.Generator.Test
             Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Bind" && a.Modifiers.Any(SyntaxKind.StaticKeyword));
             Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Reset" && !a.Modifiers.Any(SyntaxKind.StaticKeyword));
             Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "Clone" && !a.Modifiers.Any(SyntaxKind.StaticKeyword));
+            Assert.Contains(configBindMethodDeclarations, a => a.Identifier.Text == "CopyTo" && !a.Modifiers.Any(SyntaxKind.StaticKeyword));
+        }
+
+        [Fact]
+        public void CopyToExcludesIgnorePluginConfigPropertiesTest()
+        {
+            var generator = new PluginConfigGenerator();
+            var driver = CSharpGeneratorDriver.Create(
+                generator.AsSourceGenerator()
+            );
+
+            var inputCompilation = TestCompilation.Create<PluginConfigGenerator>([
+                CSharpSyntaxTree.ParseText(
+                    //lang=c#
+                    """
+                    using Elin.Plugin.Generated;
+
+                    public class ChildConfig
+                    {
+                        public int Value { get; set; }
+                        [IgnorePluginConfig]
+                        public string Hidden { get; set; } = string.Empty;
+                    }
+
+                    [GeneratePluginConfig]
+                    public partial class Config
+                    {
+                        public virtual int Number { get; set; }
+                        [IgnorePluginConfig]
+                        public int Ignored { get; set; }
+                        public ChildConfig Child { get; set; } = new ChildConfig();
+                    }
+                    """,
+                    path: "Config.cs",
+                    cancellationToken: TestContext.Current.CancellationToken
+                )
+            ]);
+
+            var generatorDriver = driver.RunGeneratorsAndUpdateCompilation(
+                inputCompilation,
+                out var outputCompilation,
+                out var diagnostics,
+                TestContext.Current.CancellationToken
+            );
+            var runResult = generatorDriver.GetRunResult();
+            var generatorResult = runResult.Results.FirstOrDefault();
+
+            Assert.True(diagnostics.IsEmpty);
+            Assert.Null(generatorResult.Exception);
+
+            var actualConfigBind = generatorResult.GeneratedSources.First(a => a.HintName == "Config.bind.g.cs");
+            var generatedSource = actualConfigBind.SourceText.ToString();
+
+            Assert.DoesNotContain("source.Ignored", generatedSource);
+            Assert.DoesNotContain("destination.Ignored", generatedSource);
+            Assert.DoesNotContain("source.Hidden", generatedSource);
+            Assert.DoesNotContain("destination.Hidden", generatedSource);
         }
 
         #endregion

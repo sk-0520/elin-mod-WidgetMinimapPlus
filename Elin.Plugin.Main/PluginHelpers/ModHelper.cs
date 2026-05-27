@@ -35,7 +35,7 @@ namespace Elin.Plugin.Main.PluginHelpers
         /// <summary>
         /// プラグイン。
         /// </summary>
-        public static BaseUnityPlugin Plugin { get; private set; } = default!;
+        public static Plugin Plugin { get; private set; } = default!;
         /// <summary>
         /// <see cref="BepInEx"/>の提供するロガー。
         /// </summary>

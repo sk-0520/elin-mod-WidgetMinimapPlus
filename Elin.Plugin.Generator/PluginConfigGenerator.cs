@@ -131,6 +131,11 @@ namespace Elin.Plugin.Generator
             return $"Clone{symbol.Name}Core";
         }
 
+        private static string ToCopyToMethodName(ISymbol symbol)
+        {
+            return $"Copy{symbol.Name}Core";
+        }
+
         private static string? GetAcceptableValue(SourceProductionContext context, Compilation compilation, SourceBuilder sourceBuilder, IPropertySymbol symbol)
         {
             var attributes = symbol.GetAttributes();
@@ -168,7 +173,6 @@ namespace Elin.Plugin.Generator
 
         private IEnumerable<IPropertySymbol> GetProperties(INamedTypeSymbol symbol)
         {
-
             var properties = symbol
                 .GetMembers()
                 .Where(a => IsConfigTarget(a))
@@ -449,6 +453,83 @@ namespace Elin.Plugin.Generator
             yield return source;
         }
 
+        private IEnumerable<string> GenerateCopySources(SourceBuilder sourceBuilder, INamedTypeSymbol typeSymbol, HashSet<string> generatedTypeNames)
+        {
+            if (!generatedTypeNames.Add(typeSymbol.ToDisplayString()))
+            {
+                yield break;
+            }
+
+            var properties = GetProperties(typeSymbol).ToArray();
+
+            var nestedProperties = GetNestedProperties(properties).ToArray();
+
+            foreach (var nested in nestedProperties.Select(a => (INamedTypeSymbol)a.Type))
+            {
+                foreach (var nestedSource in GenerateCopySources(sourceBuilder, nested, generatedTypeNames))
+                {
+                    yield return nestedSource;
+                }
+            }
+
+            var source = $$"""
+
+            private static void {{ToCopyToMethodName(typeSymbol)}}({{typeSymbol.ToDisplayString()}} source, {{typeSymbol.ToDisplayString()}} destination)
+            {
+                if (source is null)
+                {
+                    throw new global::System.ArgumentNullException(nameof(source));
+                }
+                if (destination is null)
+                {
+                    throw new global::System.ArgumentNullException(nameof(destination));
+                }
+
+                {{sourceBuilder.JoinLines(
+                    properties.Select(a =>
+                    {
+                        if (IsProxyTarget(a) || a.Type.TypeKind == TypeKind.Struct || a.Type.SpecialType == SpecialType.System_String)
+                        {
+                            return $"destination.{a.Name} = source.{a.Name};";
+                        }
+
+                        if (a.NullableAnnotation == NullableAnnotation.Annotated)
+                        {
+                            return $$"""
+                            if (source.{{a.Name}} is null)
+                            {
+                                destination.{{a.Name}} = null;
+                            }
+                            else if (destination.{{a.Name}} is null)
+                            {
+                                destination.{{a.Name}} = {{ToCloneMethodName(a.Type)}}(source.{{a.Name}});
+                            }
+                            else
+                            {
+                                {{ToCopyToMethodName(a.Type)}}(source.{{a.Name}}, destination.{{a.Name}});
+                            }
+                            """;
+                        }
+
+                        return $$"""
+                        if (destination.{{a.Name}} is null)
+                        {
+                            destination.{{a.Name}} = {{ToCloneMethodName(a.Type)}}(source.{{a.Name}});
+                        }
+                        else
+                        {
+                            {{ToCopyToMethodName(a.Type)}}(source.{{a.Name}}, destination.{{a.Name}});
+                        }
+                        """;
+                    })
+                )}}
+            }
+
+            """;
+
+            yield return source;
+        }
+
         private IEnumerable<string> GenerateCloneSources(SourceBuilder sourceBuilder, INamedTypeSymbol typeSymbol, HashSet<string> generatedTypeNames)
         {
             if (!generatedTypeNames.Add(typeSymbol.ToDisplayString()))
@@ -457,7 +538,7 @@ namespace Elin.Plugin.Generator
             }
 
             var properties = GetProperties(typeSymbol).ToArray();
-            var nestedProperties = GetNestedProperties(properties).Cast<IPropertySymbol>().ToArray();
+            var nestedProperties = GetNestedProperties(properties).ToArray();
 
             foreach (var nested in nestedProperties.Select(a => (INamedTypeSymbol)a.Type))
             {
@@ -507,6 +588,7 @@ namespace Elin.Plugin.Generator
         {
             var bindSources = GenerateBindSources(context, compilation, sourceBuilder, string.Empty, targetSymbol, null);
             var cloneSources = GenerateCloneSources(sourceBuilder, targetSymbol, new HashSet<string>());
+            var copySources = GenerateCopySources(sourceBuilder, targetSymbol, new HashSet<string>());
 
             var source = $$"""
             {{sourceBuilder.Header}}
@@ -545,12 +627,29 @@ namespace Elin.Plugin.Generator
                     throw new System.NotSupportedException("Reset is not supported: {{targetSymbol.Name}}");
                 }
 
+                /// <summary>
+                /// 現在の設定値を複製。
+                /// </summary>
                 public {{targetSymbol.Name}} Clone()
                 {
                     return {{ToCloneMethodName(targetSymbol)}}(this);
                 }
 
+                /// <summary>
+                /// 現在の設定値を指定したオブジェクトにコピー。
+                /// </summary>
+                /// <remarks>
+                /// <para><see cref="Clone"/> と違い、あらかじめ用意されたオブジェクトに上書きを行う。</para>
+                /// <para>無視データには影響を与えない点に注意。</para>
+                /// </remarks>
+                /// <param name="destination">複製先のオブジェクト。</param>
+                public void CopyTo({{targetSymbol.Name}} destination)
+                {
+                    {{ToCopyToMethodName(targetSymbol)}}(this, destination);
+                }
+            
                 {{sourceBuilder.JoinLines(cloneSources)}}
+                {{sourceBuilder.JoinLines(copySources)}}
             }
 
             """;

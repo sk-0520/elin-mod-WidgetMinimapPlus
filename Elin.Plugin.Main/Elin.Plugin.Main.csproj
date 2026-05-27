@@ -48,6 +48,11 @@
 		<RemoveDir Directories="$(TargetDir)" />
 	</Target>
 
+	<Target Name="PackageJson" BeforeTargets="BeforeBuild" Condition="Exists('$(SolutionDir)package.json')">
+		<Message Text="PackageJson: $(AssemblyName)" Importance="Normal" />
+		<Exec Command="$(PackageJsonBuildCommand)" WorkingDirectory="$(SolutionDir)" IgnoreExitCode="false" StdErrEncoding="utf-8" StdOutEncoding="utf-8" />
+	</Target>
+
 	<Target Name="ConvertPreviewImage" AfterTargets="AfterBuild" Condition="Exists('$(ProjectDir)@Assets\preview.png')">
 		<Message Text="ConvertPreviewImage: $(AssemblyName)" Importance="Normal" />
 		<Exec Command="$(PowerShellCommand) -NoProfile -NonInteractive -ExecutionPolicy Bypass -File &quot;$(SolutionDir)dev-items\convert-preview-image.ps1&quot; -Source &quot;$(ProjectDir)@Assets\preview.png&quot; -Out &quot;$(ProjectDir)@Assets\preview.jpg&quot;" WorkingDirectory="$(SolutionDir)" IgnoreExitCode="false" />

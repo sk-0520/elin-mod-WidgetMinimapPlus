@@ -8,6 +8,8 @@ namespace Elin.Plugin.Generator.Test.Use.PluginInfoGeneratorUseTestSandbox
         #region property
 
         public virtual int Data { get; set; }
+        [IgnorePluginConfig]
+        public string HiddenText { get; set; } = string.Empty;
 
         #endregion
     }
@@ -21,6 +23,8 @@ namespace Elin.Plugin.Generator.Test.Use.PluginInfoGeneratorUseTestSandbox
         public ChildConfig ChildB { get; set; } = new ChildConfig();
 
         public virtual int Value { get; set; }
+        [IgnorePluginConfig]
+        public int IgnoredValue { get; set; }
 
         #endregion
     }

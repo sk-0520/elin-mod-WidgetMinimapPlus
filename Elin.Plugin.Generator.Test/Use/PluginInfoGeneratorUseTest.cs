@@ -162,6 +162,116 @@ namespace Elin.Plugin.Generator.Test.Use
             Assert.NotSame(clonedConfigInstance.ChildB, configInstance.ChildB);
         }
 
+        [Fact]
+        public void SimpleCopyToTest()
+        {
+            var source = new SimpleConfig()
+            {
+                Value = 123,
+            };
+            var destination = new SimpleConfig()
+            {
+                Value = 999,
+            };
+
+            source.CopyTo(destination);
+
+            Assert.Equal(123, destination.Value);
+        }
+
+        [Fact]
+        public void NestCopyToTest()
+        {
+            var source = new NestConfig()
+            {
+                ChildA = new ChildConfig()
+                {
+                    Data = 123,
+                    HiddenText = "A",
+                },
+                ChildB = new ChildConfig()
+                {
+                    Data = 456,
+                    HiddenText = "B",
+                },
+                Value = 789,
+                IgnoredValue = 111,
+            };
+            var destination = new NestConfig()
+            {
+                ChildA = new ChildConfig()
+                {
+                    Data = 1,
+                    HiddenText = "X",
+                },
+                ChildB = new ChildConfig()
+                {
+                    Data = 2,
+                    HiddenText = "Y",
+                },
+                Value = 3,
+                IgnoredValue = 4,
+            };
+
+            source.CopyTo(destination);
+
+            Assert.Equal(source.Value, destination.Value);
+            Assert.NotEqual(source.IgnoredValue, destination.IgnoredValue);
+
+            Assert.Equal(source.ChildA.Data, destination.ChildA.Data);
+            Assert.NotEqual(source.ChildA.HiddenText, destination.ChildA.HiddenText);
+
+            Assert.Equal(source.ChildB.Data, destination.ChildB.Data);
+            Assert.NotEqual(source.ChildB.HiddenText, destination.ChildB.HiddenText);
+        }
+
+        [Fact]
+        public void NestCopyToNullTest()
+        {
+            var source = new NestConfig()
+            {
+                ChildA = new ChildConfig()
+                {
+                    Data = 123,
+                    HiddenText = "A",
+                },
+                ChildB = new ChildConfig()
+                {
+                    Data = 456,
+                    HiddenText = "B",
+                },
+                Value = 789,
+                IgnoredValue = 111,
+            };
+            var destination = new NestConfig()
+            {
+                ChildA = new ChildConfig()
+                {
+                    Data = 1,
+                    HiddenText = "X",
+                },
+                ChildB = null!,
+                Value = 3,
+                IgnoredValue = 4,
+            };
+
+            var destinationChildA = destination.ChildA;
+
+            source.CopyTo(destination);
+
+            Assert.Equal(source.Value, destination.Value);
+            Assert.NotEqual(source.IgnoredValue, destination.IgnoredValue);
+
+            Assert.Same(destinationChildA, destination.ChildA);
+            Assert.Equal(source.ChildA.Data, destination.ChildA.Data);
+            Assert.NotEqual(source.ChildA.HiddenText, destination.ChildA.HiddenText);
+
+            Assert.NotNull(destination.ChildB);
+            Assert.Equal(source.ChildB.Data, destination.ChildB.Data);
+            Assert.NotEqual(source.ChildB.HiddenText, destination.ChildB.HiddenText);
+        }
+
+
         #endregion
     }
 }

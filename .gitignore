@@ -52,6 +52,9 @@ msbuild.wrn
 # 何や色々
 TestResult/
 TestResults/
-*.lnk
 git-shell.bat
+node_modules
+*.lnk
+*.bak
 
+# 以下自由に

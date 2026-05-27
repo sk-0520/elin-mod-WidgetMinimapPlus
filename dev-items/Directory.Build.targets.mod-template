@@ -4,4 +4,8 @@
 		<ElinPath>$(SteamPath)\steamapps\common\Elin</ElinPath>
 		<ModPath>$(ElinPath)\Package\$(AssemblyName)</ModPath>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageJsonBuildCommand>npm run build</PackageJsonBuildCommand>
+	</PropertyGroup>
 </Project>
