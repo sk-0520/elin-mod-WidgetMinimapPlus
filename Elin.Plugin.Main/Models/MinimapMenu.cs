@@ -251,7 +251,7 @@ namespace Elin.Plugin.Main.Models
                 ApplySetting(false);
             });
 
-            var bigDaddyRow = EClass.sources.charas.map[ElinId.BigDaddyId];
+            var bigDaddyRow = EClass.sources.charas.map[ElinId.BigDaddy1Id];
             var bigDaddyMenu = currentMenu.AddChild(bigDaddyRow.GetName());
             AddColorMenus(bigDaddyMenu, true, true, setting.BigDaddyColor, a =>
             {

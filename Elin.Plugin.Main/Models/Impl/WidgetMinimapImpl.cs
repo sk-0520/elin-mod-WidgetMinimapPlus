@@ -350,7 +350,7 @@ namespace Elin.Plugin.Main.Models.Impl
                             color = setting.EvolvedColor;
                             break;
 
-                        case { id: ElinId.BigDaddyId }:
+                        case { id: (ElinId.BigDaddy1Id or ElinId.BigDaddy2Id) }:
                             color = setting.BigDaddyColor;
                             break;
 
