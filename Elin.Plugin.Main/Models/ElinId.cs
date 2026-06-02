@@ -24,7 +24,10 @@ namespace Elin.Plugin.Main.Models
         /// [特殊キャラクター] ビッグダディ。
         /// </summary>
         /// <remarks>SourceChara.xlsx!Chara</remarks>
-        public const string BigDaddyId = "big_daddy";
+        public const string BigDaddy1Id = "big_daddy";
+        /// <inheritdoc cref="BigDaddy1Id"/>
+        public const string BigDaddy2Id = "big_daddy2";
+
         /// <summary>
         /// [特殊キャラクター] サンタクロース。
         /// </summary>
@@ -34,7 +37,7 @@ namespace Elin.Plugin.Main.Models
         /// <summary>
         /// 特殊キャラクター一覧。
         /// </summary>
-        public static readonly string[] SpecialCharacterIds = [BigDaddyId, SantaId];
+        public static readonly string[] SpecialCharacterIds = [BigDaddy1Id, BigDaddy2Id, SantaId];
 
         /// <summary>
         /// [特殊アイテム] 宝箱。
